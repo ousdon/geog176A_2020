@@ -1,1 +1,9 @@
-
+name: "first-webpage"
+output_dir: "."
+navbar:
+  title: "My First Website"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Geography 176A Work"
+      href: geog176A.html
