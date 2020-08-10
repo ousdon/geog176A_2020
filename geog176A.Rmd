@@ -2,9 +2,9 @@
 title: "Projects"
 ---
 
-In this summer of 2020 I took a GEOG 176A class based in R. It is my first time using R to work on gis, and learn many data science skills. Here is all the work I have start begin! 
+In this summer of 2020, I took a GEOG 176A class based in R. It is my first time using R to work on GIS, and I am so exciting to learn R and GIS. Here is all the work I would expect to learn! 
 
-## [Building a project website]()
+## [Building a project website](https://ousdon.github.io/geog176a-summer-2020-lab1/index.html)
 
 - We are doing all the R work with github 
 - Learning how to use R.
