@@ -14,7 +14,7 @@ navbar:
       href: CV.html
   right:
     - icon: fa-github
-      href: https://github.com/ousdon/geog176a-summer-2020-lab1
+      href: https://github.com/ousdon/geog176a-lab1
 output:
   html_document:
     theme: simplex
