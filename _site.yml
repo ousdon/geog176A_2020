@@ -9,6 +9,9 @@ navbar:
     - text: "Geography 176A Work"
       icon: fa-pencil-ruler
       href: geog176A.html
+    - text: "CV"
+      icon: fa-sticky-note
+      href: CV.rmd
   right:
     - icon: fa-github
       href: https://github.com/ousdon/geog176a-summer-2020-lab1
