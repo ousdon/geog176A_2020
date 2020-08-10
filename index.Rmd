@@ -10,4 +10,3 @@ Hello!!! This is my first webpage using R to create a website, and it's very exc
 
 ![Hello Welcome](img/Guilin.jpg) 
 
-
