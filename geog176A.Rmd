@@ -9,3 +9,4 @@ In this summer of 2020, I took a GEOG 176A class based in R. It is my first time
 - We are doing all the R work with github 
 - Learning how to use R.
 - I will try me best to learn!
+
