@@ -8,4 +8,4 @@ title: "About Me"
   
 [Poem](https://en.wikipedia.org/wiki/Roses_Are_Red) Roses are red. Violets are blue. This is my first webpage using R to create, and it's very excited to using R on GIS work.
 
-![Hello](img/Guilin.jpg) 
+![Hello Welcome](img/Guilin.jpg) 
