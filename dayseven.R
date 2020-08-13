@@ -1,5 +1,5 @@
 ---
-  Author: "Xingxin Li"
+Author: "Xingxin Li"
 Date:"2020-08-12"
 Exercise: "No.7"
 output:html_document
