@@ -13,7 +13,7 @@ navbar:
       icon: fa-sticky-note
       href: CV.html
     - text: "day-07"
-      icon: fa-sticky-note
+      icon: fa-accusoft
       href: day-07.html
   right:
     - icon: fa-github
