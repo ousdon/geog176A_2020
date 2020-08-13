@@ -12,9 +12,9 @@ navbar:
     - text: "CV"
       icon: fa-sticky-note
       href: CV.html
-    - text: "day-07"
+    - text: "Day-07"
       icon: fa-accusoft
-      href: day-07.html
+      href: dayseven.html
   right:
     - icon: fa-github
       href: https://github.com/ousdon/geog176a-lab1
