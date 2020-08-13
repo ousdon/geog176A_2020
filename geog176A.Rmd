@@ -4,7 +4,13 @@ title: "Projects"
 
 In this summer of 2020, I took a GEOG 176A class based in R. It is my first time using R to work on GIS, and I am so exciting to learn R and GIS. Here is all the work I would expect to learn! 
 
+<<<<<<< HEAD
 - We are doing all the R work with github
+=======
+## [Building a project website](https://ousdon.github.io/geog176a-lab1/index.html)
+
+- We are doing all the R work with github 
+>>>>>>> 393e610d7899fffca80cdc9868c953a3f2fe1763
 - Learning how to use R.
 - I will try me best to learn!
 
