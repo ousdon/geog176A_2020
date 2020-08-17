@@ -15,6 +15,9 @@ navbar:
     - text: "day-07"
       icon: fa-accusoft
       href: day-07.html
+    - text: "Lab2"
+      icon: fa-accusoft
+      href: lab2.html
   right:
     - icon: fa-github
       href: https://github.com/ousdon/geog176a-lab1

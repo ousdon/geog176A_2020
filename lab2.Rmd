@@ -1,0 +1,176 @@
+---
+title: "Lab2"
+author: "Xingxin Li"
+date: "8/17/2020"
+output: html_document
+---
+
+```{r setup, message = FALSE, warning = FALSE}
+library(dplyr) 
+library(ggplot2)
+library(tidyverse)
+library(zoo)
+library(knitr)
+library(readxl)
+
+url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+read_csv(url)
+source = "/Users/xingxin/Github/geog176a-lab2/data/"
+
+
+covid<-read_csv(url)
+head(covid)
+```
+
+# Question 1
+``` {r, message = FALSE, warning = FALSE}
+#  California, the daily new cases
+dat = covid %>% 
+  filter(state == "California") %>% 
+  group_by(county) %>% 
+  mutate(newCases = c(NA, diff(cases))) %>% 
+  ungroup() %>% 
+  filter(date == max(date)) 
+```
+
+``` {r, message = FALSE, warning = FALSE}
+#  the 5 counties with the most cumulative cases
+most_cum_cases = dat %>% 
+  slice_max(cases, n = 5) %>% 
+  select(county, cases)
+
+knitr::kable(most_cum_cases, 
+             caption = "Most Cumulative Cases California Counties",
+             col.names = c("County", "cumulative Cases"))
+
+```
+``` {r, message = FALSE, warning = FALSE}
+# the 5 counties with the most NEW cases
+most_new_cases = dat %>% 
+  slice_max(newCases, n = 5) %>% 
+  select(county, newCases)
+
+knitr::kable(most_new_cases, 
+             caption = "Most New Cases California Counties",
+             col.names = c("County", "New Cases"))
+```
+``` {r, message = FALSE, warning = FALSE}
+# import population data
+PopulationEstimates <- read_excel(paste(source,"PopulationEstimates.xls",sep = ""), 
+                                  skip = 2)
+population_2019 = PopulationEstimates %>% 
+  select(FIPStxt,POP_ESTIMATE_2019) 
+
+# join the population data to the California COVID data.  
+dat2 <-inner_join(dat, population_2019, by = c("fips" = "FIPStxt"))
+```
+
+``` {r, message = FALSE, warning = FALSE}
+#  the 5 counties with the most cumulative cases per capita
+most_cum_cases_pc = dat2 %>%
+  mutate(Cases_pc = cases/POP_ESTIMATE_2019) %>%
+  slice_max(Cases_pc, n = 5) %>% 
+  select(county, Cases_pc)
+
+knitr::kable(most_cum_cases_pc, 
+             caption = "Most Cumulative Cases California Counties Per Capita",
+             col.names = c("County", "cumulative Cases Per Capita"))
+```
+``` {r, message = FALSE, warning = FALSE}
+# the 5 counties with the most NEW cases per capita
+most_new_cases_pc = dat2 %>% 
+  mutate(newCases_pc = newCases/POP_ESTIMATE_2019) %>%
+  slice_max(newCases_pc, n = 5) %>% 
+  select(county, newCases_pc)
+
+knitr::kable(most_new_cases_pc, 
+             caption = "Most New Cases California Counties Per Capit",
+             col.names = c("County", "New Cases Per Capit"))
+```
+``` {r, message = FALSE, warning = FALSE}
+# 14-days 
+per_cap = covid %>% 
+  filter(state == "California") %>% 
+  group_by(county) %>% 
+  mutate(newCases = c(NA, diff(cases))) %>% 
+  ungroup() %>%
+  filter(date >= max(date)-13)  %>%
+  inner_join(population_2019, by = c("fips" = "FIPStxt"))
+
+#Calculate Safe counties
+dat_14 = per_cap %>%
+  group_by(county,POP_ESTIMATE_2019) %>%
+  summarize(tot_newCases = sum(newCases, na.rm = TRUE),tot_cumCases = sum(cases, na.rm = TRUE)) %>%  
+  ungroup() %>%
+  mutate(tot_safe_county = tot_newCases/(POP_ESTIMATE_2019/100000)) %>% 
+  filter(tot_safe_county < 100)
+```
+
+### Results of  California 
+(1) the total number of cases:
+ `r sum(dat$cases)` 
+
+(2) the total number of new cases:
+ `r sum(dat$newCases)` 
+ 
+(3) the total number of the total number of safe counties :
+ `r sum(nrow(dat_14))` 
+ 
+ # Question 2
+```{r, message = FALSE, warning = FALSE}
+# facet plot of the daily new cases and the 7-day rolling mean
+# select four states
+four_states <- covid %>%
+  filter(state %in% c("New York","California", "Louisiana", "Florida")) %>%
+  group_by(state, date) %>%
+  summarize(cases = sum(cases)) %>% 
+  ungroup() %>% 
+  group_by(state) %>% 
+  mutate(newCases = cases - lag(cases),
+         roll7 = rollmean(newCases, 7, fill = NA, align = 'right')) %>%
+  ungroup() %>%
+  filter(newCases > 0)
+
+  ggplot(data = four_states,aes(x = date)) +
+  geom_col(aes(y = newCases), col = NA, fill = "#F5B8B5") +  
+  geom_line(aes(y = roll7), col = "darkred", size = 1) +  
+  labs(x = "Date", y = "Daily New Cases",
+       title = "New Reported Cases By Day ") +
+  theme(plot.background = element_rect(fill = "white"),  
+        panel.background = element_rect(fill = "white"),  
+        plot.title = element_text(size = 14, face = 'bold')) +  
+  facet_grid(~state, scales = "free_y")
+```
+```{r, message = FALSE, warning = FALSE}
+# import population data
+PopulationEstimates <- read_excel(paste(source,"PopulationEstimates.xls",sep = ""), 
+                                  skip = 2)
+population_2019 = PopulationEstimates %>% 
+  select(Area_Name,POP_ESTIMATE_2019) 
+```
+
+```{r, message = FALSE, warning = FALSE}
+# facet plot of the daily new cases and the 7-day rolling mean
+# select four states per capita
+four_states_pc <- population_2019 %>%
+  right_join(four_states, by = c("Area_Name" = "state")) %>%
+  mutate(newCases_pc = (newCases/POP_ESTIMATE_2019), 
+         roll7 = rollmean(newCases_pc, 7, fill = NA, align = 'right')) %>%
+  ungroup() %>%
+  filter(newCases_pc > 0)
+
+  ggplot(data = four_states_pc,aes(x = date)) +
+  geom_col(aes(y = newCases_pc), col = NA, fill = "skyblue") +  
+  geom_line(aes(y = roll7), col = "darkblue", size = 1) +  
+  labs(x = "Date", y = "Daily New Cases Per Capita",
+       title = "New Reported Cases Per Capita By Day ") +
+  theme(plot.background = element_rect(fill = "white"),  
+        panel.background = element_rect(fill = "white"),  
+        plot.title = element_text(size = 14, face = 'bold')) +  
+  facet_grid(~Area_Name, scales = "free_y") 
+```
+
+
+
+
+The absolute value of new cases in Louisiana is much lower than the other three states. However, the new cases per capita in Louisiana is close to the other states. The possible reason is that Louisiana has a much smaller populaition compared with other states.
