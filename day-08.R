@@ -5,7 +5,6 @@ exercise: "No.7"
 output:html_document
 ---
 
-
 url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
 read_csv(url)
 
