@@ -1,6 +1,8 @@
 ---
 title: "Daily Exercise 8"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
  
