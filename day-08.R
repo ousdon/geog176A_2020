@@ -1,7 +1,7 @@
 ---
 author: "Xingxin Li"
 date:"2020-08-16"
-exercise: "No.7"
+exercise: "No.8"
 output:html_document
 ---
 
