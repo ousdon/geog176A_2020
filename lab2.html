@@ -309,6 +309,13 @@ $(document).ready(function () {
     Lab2
   </a>
 </li>
+<li>
+  <a href="lab3.html">
+    <span class="fa fa-accusoft"></span>
+     
+    Lab3
+  </a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -342,7 +349,7 @@ library(readxl)
 
 url = &#39;https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv&#39;
 read_csv(url)</code></pre>
-<pre><code>## # A tibble: 440,745 x 6
+<pre><code>## # A tibble: 463,338 x 6
 ##    date       county      state      fips  cases deaths
 ##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
 ##  1 2020-01-21 Snohomish   Washington 53061     1      0
@@ -355,7 +362,7 @@ read_csv(url)</code></pre>
 ##  8 2020-01-25 Snohomish   Washington 53061     1      0
 ##  9 2020-01-26 Maricopa    Arizona    04013     1      0
 ## 10 2020-01-26 Los Angeles California 06037     1      0
-## # … with 440,735 more rows</code></pre>
+## # … with 463,328 more rows</code></pre>
 <pre class="r"><code>source = &quot;/Users/xingxin/Github/geog176a-lab2/data/&quot;
 
 
@@ -398,23 +405,23 @@ knitr::kable(most_cum_cases,
 <tbody>
 <tr class="odd">
 <td align="left">Los Angeles</td>
-<td align="right">221950</td>
+<td align="right">231695</td>
 </tr>
 <tr class="even">
 <td align="left">Riverside</td>
-<td align="right">46720</td>
+<td align="right">49944</td>
 </tr>
 <tr class="odd">
 <td align="left">Orange</td>
-<td align="right">43709</td>
+<td align="right">45954</td>
 </tr>
 <tr class="even">
 <td align="left">San Bernardino</td>
-<td align="right">41231</td>
+<td align="right">45035</td>
 </tr>
 <tr class="odd">
 <td align="left">San Diego</td>
-<td align="right">34741</td>
+<td align="right">36603</td>
 </tr>
 </tbody>
 </table>
@@ -437,23 +444,23 @@ knitr::kable(most_new_cases,
 <tbody>
 <tr class="odd">
 <td align="left">Los Angeles</td>
-<td align="right">1188</td>
+<td align="right">1033</td>
 </tr>
 <tr class="even">
+<td align="left">Riverside</td>
+<td align="right">462</td>
+</tr>
+<tr class="odd">
 <td align="left">San Bernardino</td>
-<td align="right">789</td>
-</tr>
-<tr class="odd">
-<td align="left">Fresno</td>
-<td align="right">703</td>
+<td align="right">432</td>
 </tr>
 <tr class="even">
-<td align="left">Sacramento</td>
-<td align="right">373</td>
+<td align="left">Fresno</td>
+<td align="right">357</td>
 </tr>
 <tr class="odd">
-<td align="left">Orange</td>
-<td align="right">342</td>
+<td align="left">San Diego</td>
+<td align="right">337</td>
 </tr>
 </tbody>
 </table>
@@ -485,23 +492,23 @@ knitr::kable(most_cum_cases_pc,
 <tbody>
 <tr class="odd">
 <td align="left">Imperial</td>
-<td align="right">0.0555031</td>
+<td align="right">0.0573518</td>
 </tr>
 <tr class="even">
 <td align="left">Kings</td>
-<td align="right">0.0360534</td>
+<td align="right">0.0387145</td>
 </tr>
 <tr class="odd">
 <td align="left">Kern</td>
-<td align="right">0.0295156</td>
+<td align="right">0.0312597</td>
 </tr>
 <tr class="even">
 <td align="left">Tulare</td>
-<td align="right">0.0263023</td>
+<td align="right">0.0283058</td>
 </tr>
 <tr class="odd">
 <td align="left">Merced</td>
-<td align="right">0.0244058</td>
+<td align="right">0.0269843</td>
 </tr>
 </tbody>
 </table>
@@ -525,23 +532,23 @@ knitr::kable(most_new_cases_pc,
 <tbody>
 <tr class="odd">
 <td align="left">Monterey</td>
-<td align="right">0.0007833</td>
+<td align="right">0.0004677</td>
+</tr>
+<tr class="even">
+<td align="left">Sutter</td>
+<td align="right">0.0003816</td>
+</tr>
+<tr class="odd">
+<td align="left">San Benito</td>
+<td align="right">0.0003662</td>
 </tr>
 <tr class="even">
 <td align="left">Fresno</td>
-<td align="right">0.0007036</td>
+<td align="right">0.0003573</td>
 </tr>
 <tr class="odd">
-<td align="left">Kings</td>
-<td align="right">0.0006865</td>
-</tr>
-<tr class="even">
-<td align="left">Inyo</td>
-<td align="right">0.0004435</td>
-</tr>
-<tr class="odd">
-<td align="left">Sutter</td>
-<td align="right">0.0004434</td>
+<td align="left">Kern</td>
+<td align="right">0.0002499</td>
 </tr>
 </tbody>
 </table>
@@ -564,9 +571,9 @@ dat_14 = per_cap %&gt;%
 <div id="results-of-california" class="section level3">
 <h3>Results of California</h3>
 <ol style="list-style-type: decimal">
-<li><p>the total number of cases: 6.2850810^{5}</p></li>
-<li><p>the total number of new cases: 6527</p></li>
-<li><p>the total number of the total number of safe counties : 12</p></li>
+<li><p>the total number of cases: 6.6994410^{5}</p></li>
+<li><p>the total number of new cases: 4619</p></li>
+<li><p>the total number of the total number of safe counties : 15</p></li>
 </ol>
 <p># Question 2</p>
 <pre class="r"><code># facet plot of the daily new cases and the 7-day rolling mean
