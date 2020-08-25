@@ -1,0 +1,51 @@
+---
+title: "day13"
+author: "Xingxin Li"
+date: "8/25/2020"
+output: html_document
+---
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+# SPDS
+library(tidyverse)
+library(sf)
+library(units)
+# Data
+library(USAboundaries)
+library(rnaturalearthdata)
+library(rnaturalearth)
+# Visualization
+library(gghighlight)
+library(ggrepel)
+library(knitr)
+library(rmapshaper)
+
+```
+
+
+
+```{r}
+states = USAboundaries::us_states() %>% 
+  filter(!name %in% c("Hawaii", "Puerto Rico", "Alaska"))
+  states = st_transform(states, 5070)
+  usa = st_simplify(states, dTolerance = 10000)
+  simp_states = st_simplify(states, dTolerance = 20000)
+  mapview::npts(states)
+  plot(simp_states$geometry)
+
+```
+
+
+
+
+```{r}
+states = USAboundaries::us_states() %>% 
+  filter(!name %in% c("Hawaii", "Puerto Rico", "Alaska"))
+  states = st_transform(states, 5070)
+  usa = ms_simplify(states, keep = .1)
+  simp_states = ms_simplify(states, keep = .1)
+  mapview::npts(states)
+  plot(simp_states$geometry)
+
+```
