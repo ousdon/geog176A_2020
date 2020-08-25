@@ -303,6 +303,13 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
+  <a href="day13.html">
+    <span class="fa fa-accusoft"></span>
+     
+    day-13
+  </a>
+</li>
+<li>
   <a href="lab2.html">
     <span class="fa fa-accusoft"></span>
      
@@ -355,7 +362,7 @@ read_csv(url)</code></pre>
 ##   cases = col_double(),
 ##   deaths = col_double()
 ## )</code></pre>
-<pre><code>## # A tibble: 463,338 x 6
+<pre><code>## # A tibble: 466,567 x 6
 ##    date       county      state      fips  cases deaths
 ##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
 ##  1 2020-01-21 Snohomish   Washington 53061     1      0
@@ -368,7 +375,7 @@ read_csv(url)</code></pre>
 ##  8 2020-01-25 Snohomish   Washington 53061     1      0
 ##  9 2020-01-26 Maricopa    Arizona    04013     1      0
 ## 10 2020-01-26 Los Angeles California 06037     1      0
-## # … with 463,328 more rows</code></pre>
+## # … with 466,557 more rows</code></pre>
 <pre class="r"><code>counties&lt;-read.csv(url)
 state = read_csv(url)</code></pre>
 <pre><code>## Parsed with column specification:
@@ -389,7 +396,7 @@ state = read_csv(url)</code></pre>
 ## 5 2020-01-24 Snohomish Washington 53061     1      0
 ## 6 2020-01-25    Orange California  6059     1      0</code></pre>
 <pre class="r"><code>select(state,cases)</code></pre>
-<pre><code>## # A tibble: 463,338 x 1
+<pre><code>## # A tibble: 466,567 x 1
 ##    cases
 ##    &lt;dbl&gt;
 ##  1     1
@@ -402,7 +409,7 @@ state = read_csv(url)</code></pre>
 ##  8     1
 ##  9     1
 ## 10     1
-## # … with 463,328 more rows</code></pre>
+## # … with 466,557 more rows</code></pre>
 <pre class="r"><code>region = data.frame(state.abb = state.name, region = state.region)
 
 covid&lt;-counties %&gt;% inner_join(region, by = c(&quot;state&quot; = &quot;state.abb&quot;))
