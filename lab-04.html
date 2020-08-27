@@ -323,6 +323,13 @@ $(document).ready(function () {
     Lab3
   </a>
 </li>
+<li>
+  <a href="lab-04.html">
+    <span class="fa fa-accusoft"></span>
+     
+    Lab4
+  </a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -347,25 +354,12 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
-## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
-## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(sf)</code></pre>
-<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.1, PROJ 6.3.1</code></pre>
-<pre class="r"><code>library(USAboundaries)
-library(rmapshaper)</code></pre>
-<pre><code>## Registered S3 method overwritten by &#39;geojsonlint&#39;:
-##   method         from 
-##   print.location dplyr</code></pre>
-<pre class="r"><code>library(units)</code></pre>
-<pre><code>## udunits system database from /Library/Frameworks/R.framework/Versions/4.0/Resources/library/units/share/udunits</code></pre>
-<pre class="r"><code>library(knitr)
+<pre class="r"><code>library(tidyverse)
+library(sf)
+library(USAboundaries)
+library(rmapshaper)
+library(units)
+library(knitr)
 library(ggplot2)</code></pre>
 <pre class="r"><code>#Q1.1
 conus = USAboundaries::us_counties() %&gt;%
