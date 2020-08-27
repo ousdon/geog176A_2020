@@ -24,6 +24,9 @@ navbar:
     - text: "Lab3"
       icon: fa-accusoft
       href: lab3.html
+    - text: "Lab4"
+      icon: fa-accusoft
+      href: lab-04.html
   right:
     - icon: fa-github
       href: https://github.com/ousdon/geog176a-lab1
