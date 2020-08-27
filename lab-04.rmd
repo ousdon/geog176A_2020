@@ -1,0 +1,94 @@
+---
+title: "lab4"
+author: "Xingxin Li"
+date: "8/27/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(sf)
+library(USAboundaries)
+library(rmapshaper)
+library(units)
+library(knitr)
+library(ggplot2)
+```
+
+
+
+```{r, warning = FALSE, message = FALSE}
+#Q1.1
+conus = USAboundaries::us_counties() %>%
+  filter(!state_name %in% c("Puerto Rico", "Alaska", "Hawaii")) %>%
+  st_transform(5070)
+
+conus_ms = ms_simplify(conus, keep = 0.05)
+
+conus = mapview::npts(conus)
+simp = mapview::npts(conus_ms)
+```
+
+```{r, warning = FALSE, message = FALSE}
+#Q1.2
+county_centroid = st_centroid(conus_ms) %>%
+  st_combine() %>%
+  st_cast("MULTIPOINT")
+```
+
+```{r, warning = FALSE, message = FALSE}
+#Q1.3
+county_centroid_u = st_union(county_centroid)
+
+v_grid = st_voronoi(county_centroid) %>% 
+  st_cast() %>% 
+  st_as_sf() %>% 
+  mutate(id = 1:n())
+
+t_grid = st_triangulate(county_centroid) %>% 
+  st_cast() %>% 
+  st_as_sf() %>% 
+  mutate(id = 1:n())
+
+sq_grid = st_make_grid(county_centroid, n = c(70, 50)) %>% 
+  st_as_sf() %>% 
+  mutate(id = 1:n())
+
+hex_grid = st_make_grid(county_centroid, n = c(70, 50), square = FALSE) %>% 
+  st_as_sf() %>% 
+  mutate(id = 1:n())
+
+```
+
+```{r, warning = FALSE, message = FALSE}
+#Q1.4 - Q1.7
+plot_tess = function(data, title){
+  ggplot() + 
+    geom_sf(data = data, fill = "white", col = "navy", size = .2) +   
+    theme_void() +
+    labs(title = title, caption = paste("This tesselation has:", nrow(data), "tiles" )) +
+    theme(plot.title = element_text(hjust = .5, color =  "navy", face = "bold"))
+}
+
+plot_tess(data = conus_ms, "Counties Centroid Data")
+
+v_grid = st_intersection(v_grid, st_union(conus_ms))
+plot_tess(v_grid, "Voronoi Coverage") +
+  geom_sf(data = county_centroid, col = "darkred", size = 0.2)
+
+t_grid = st_intersection(t_grid, st_union(conus_ms))
+plot_tess(t_grid, "Triangulated Coverage") +
+  geom_sf(data = county_centroid, col = "darkred", size = 0.2)
+
+sq_grid = st_intersection(sq_grid, st_union(conus_ms))
+plot_tess(sq_grid, "Square Coverage") +
+  geom_sf(data = county_centroid, col = "darkred", size = 0.2)
+
+hex_grid = st_intersection(hex_grid, st_union(conus_ms))
+plot_tess(hex_grid, "Hexagonal Coverage") +
+  geom_sf(data = county_centroid, col = "darkred", size = 0.2)
+
+
+```
+
+
