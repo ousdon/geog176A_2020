@@ -1,0 +1,35 @@
+---
+title: "day16"
+author: "Xingxin Li"
+date: "8/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(leaflet)
+library(sf)
+library(sp)
+library(tidyverse)
+library(USAboundaries)
+library(readr)
+library(htmltools)
+```
+
+
+
+```{r}
+m <- leaflet()
+at <- addTiles(m)
+addMarkers(at,lng=114.177, lat=22.303, popup="My Favorite Place to Visit")
+```
+
+
+```{r}
+m <- leaflet()
+at <- addTiles(m)
+addMarkers(at,lng=114.1874, lat=22.3856, popup="IKEA Hong Kong, Sha Tin") %>%
+addMarkers(at,lng=114.2198, lat=22.2807, popup="IKEA Hong Kong, Island East") %>%
+addMarkers(at,lng=114.2081, lat=22.3196, popup="IKEA Hong Kong, Kowloon Bay") %>% 
+addMarkers(at,lng=114.1860, lat=22.2814, popup="IKEA Hong Kong, Causeway Bay") %>% 
+addMarkers(at,lng=114.1130, lat=22.3753, popup="IKEA Hong Kong, Tsuen Wan")
+```

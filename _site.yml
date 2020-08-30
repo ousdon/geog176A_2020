@@ -18,6 +18,9 @@ navbar:
     - text: "day-13"
       icon: fa-accusoft
       href: day13.html
+    - text: "day-16"
+      icon: fa-accusoft
+      href: day16.html
     - text: "Lab2"
       icon: fa-accusoft
       href: lab2.html
