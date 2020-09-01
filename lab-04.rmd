@@ -115,7 +115,7 @@ total_tess(hex_grid, "Hexagon")
 ```{r, warning = FALSE, message = FALSE}
 #2.3
 tess_summary = bind_rows(
-  total_tess(conus_ms, "Raw_original"),
+  total_tess(conus_ms, "Counties"),
   total_tess(v_grid, "Voroni"),
   total_tess(t_grid, "Triangulation"),
   total_tess(sq_grid, "Square"),
