@@ -23,6 +23,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -361,27 +363,52 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)
-library(sf)
-library(USAboundaries)
-library(rmapshaper)
-library(units)
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(sf)</code></pre>
+<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.1, PROJ 6.3.1</code></pre>
+<pre class="r"><code>library(USAboundaries)
+library(rmapshaper)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;geojsonlint&#39;:
+##   method         from 
+##   print.location dplyr</code></pre>
+<pre class="r"><code>library(kableExtra)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;kableExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     group_rows</code></pre>
+<pre class="r"><code>library(units)</code></pre>
+<pre><code>## udunits system database from /Library/Frameworks/R.framework/Versions/4.0/Resources/library/units/share/udunits</code></pre>
+<pre class="r"><code>library(plotrix)
 library(knitr)
-library(ggplot2)</code></pre>
-<pre class="r"><code>#Q1.1
+library(ggplot2)
+library(readxl)
+library(dplyr)
+library(gghighlight)</code></pre>
+<pre class="r"><code>#1.1
 conus = USAboundaries::us_counties() %&gt;%
   filter(!state_name %in% c(&quot;Puerto Rico&quot;, &quot;Alaska&quot;, &quot;Hawaii&quot;)) %&gt;%
+  st_transform(5070)</code></pre>
+<pre class="r"><code>#1.2
+conus_ms &lt;- us_states() %&gt;%
+  filter(!(state_name %in% c(&#39;Puerto Rico&#39;, &#39;Alaska&#39;, &#39;Hawaii&#39;))) %&gt;% 
+  st_as_sf(coords = c(&quot;lng&quot;,&quot;lat&quot;), crs = 5326) %&gt;%  
   st_transform(5070)
 
 conus_ms = ms_simplify(conus, keep = 0.05)
 
-conus = mapview::npts(conus)
-simp = mapview::npts(conus_ms)</code></pre>
-<pre class="r"><code>#Q1.2
 county_centroid = st_centroid(conus_ms) %&gt;%
   st_combine() %&gt;%
   st_cast(&quot;MULTIPOINT&quot;)</code></pre>
-<pre class="r"><code>#Q1.3
+<pre class="r"><code>#1.3
 county_centroid_u = st_union(county_centroid)
 
 v_grid = st_voronoi(county_centroid) %&gt;% 
@@ -401,7 +428,7 @@ sq_grid = st_make_grid(county_centroid, n = c(70, 50)) %&gt;%
 hex_grid = st_make_grid(county_centroid, n = c(70, 50), square = FALSE) %&gt;% 
   st_as_sf() %&gt;% 
   mutate(id = 1:n())</code></pre>
-<pre class="r"><code>#Q1.4 - Q1.7
+<pre class="r"><code>#1.4 - 1.7
 plot_tess = function(data, title){
   ggplot() + 
     geom_sf(data = data, fill = &quot;white&quot;, col = &quot;navy&quot;, size = .2) +   
@@ -410,24 +437,282 @@ plot_tess = function(data, title){
     theme(plot.title = element_text(hjust = .5, color =  &quot;navy&quot;, face = &quot;bold&quot;))
 }
 
-plot_tess(data = conus_ms, &quot;Counties Centroid Data&quot;)</code></pre>
+plot_tess(data = conus_ms, &quot;Counties Coverage&quot;)</code></pre>
 <p><img src="lab-04_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code>v_grid = st_intersection(v_grid, st_union(conus_ms))
-plot_tess(v_grid, &quot;Voronoi Coverage&quot;) +
-  geom_sf(data = county_centroid, col = &quot;darkred&quot;, size = 0.2)</code></pre>
+plot_tess(v_grid, &quot;Voronoi Coverage&quot;) </code></pre>
 <p><img src="lab-04_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
 <pre class="r"><code>t_grid = st_intersection(t_grid, st_union(conus_ms))
-plot_tess(t_grid, &quot;Triangulated Coverage&quot;) +
-  geom_sf(data = county_centroid, col = &quot;darkred&quot;, size = 0.2)</code></pre>
+plot_tess(t_grid, &quot;Triangulated Coverage&quot;) </code></pre>
 <p><img src="lab-04_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
 <pre class="r"><code>sq_grid = st_intersection(sq_grid, st_union(conus_ms))
-plot_tess(sq_grid, &quot;Square Coverage&quot;) +
-  geom_sf(data = county_centroid, col = &quot;darkred&quot;, size = 0.2)</code></pre>
+plot_tess(sq_grid, &quot;Square Coverage&quot;) </code></pre>
 <p><img src="lab-04_files/figure-html/unnamed-chunk-5-4.png" width="672" /></p>
 <pre class="r"><code>hex_grid = st_intersection(hex_grid, st_union(conus_ms))
-plot_tess(hex_grid, &quot;Hexagonal Coverage&quot;) +
-  geom_sf(data = county_centroid, col = &quot;darkred&quot;, size = 0.2)</code></pre>
+plot_tess(hex_grid, &quot;Hexagon Coverage&quot;) </code></pre>
 <p><img src="lab-04_files/figure-html/unnamed-chunk-5-5.png" width="672" /></p>
+<pre class="r"><code>#2.1
+total_tess = function(data, title){
+    area = st_area(data) %&gt;% 
+    units::set_units(&quot;km2&quot;) %&gt;%
+    units::drop_units() 
+  
+data_frame(title, nrow(data), mean(area), sd(area), sum(area)) 
+}</code></pre>
+<pre class="r"><code>#2.2 
+total_tess(conus_ms, &quot;Raw_original&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   title        `nrow(data)` `mean(area)` `sd(area)` `sum(area)`
+##   &lt;chr&gt;               &lt;int&gt;        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Raw_original         3075        2544.      3428.    7822757.</code></pre>
+<pre class="r"><code>total_tess(v_grid, &quot;Voronoi&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   title   `nrow(data)` `mean(area)` `sd(area)` `sum(area)`
+##   &lt;chr&gt;          &lt;int&gt;        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Voronoi         3075        2544.      2894.    7822757.</code></pre>
+<pre class="r"><code>total_tess(t_grid, &quot;Triangulation&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   title         `nrow(data)` `mean(area)` `sd(area)` `sum(area)`
+##   &lt;chr&gt;                &lt;int&gt;        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Triangulation         6130        1263.      1583.    7740190.</code></pre>
+<pre class="r"><code>total_tess(sq_grid, &quot;Square&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   title  `nrow(data)` `mean(area)` `sd(area)` `sum(area)`
+##   &lt;chr&gt;         &lt;int&gt;        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Square         1635        3484.       401.    5696590.</code></pre>
+<pre class="r"><code>total_tess(hex_grid, &quot;Hexagon&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   title   `nrow(data)` `mean(area)` `sd(area)` `sum(area)`
+##   &lt;chr&gt;          &lt;int&gt;        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Hexagon         1633        3501.       352.    5716720.</code></pre>
+<pre class="r"><code>#2.3
+tess_summary = bind_rows(
+  total_tess(conus_ms, &quot;Raw_original&quot;),
+  total_tess(v_grid, &quot;Voroni&quot;),
+  total_tess(t_grid, &quot;Triangulation&quot;),
+  total_tess(sq_grid, &quot;Square&quot;),
+  total_tess(hex_grid, &quot;Hexagon&quot;))</code></pre>
+<pre class="r"><code>#2.4
+knitr::kable(tess_summary,
+caption = &quot;Types of Tessellation&quot;,
+col.names = c(&quot;Name&quot;,&quot;Numbers&quot;,&quot;Mean_Area&quot;,&quot;Sd_Area(km2)&quot;,&quot;Sum_Area&quot;),
+format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+kableExtra::kable_styling(&quot;basic&quot;, full_width = TRUE, font_size = 16)</code></pre>
+<table class="table" style="font-size: 16px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Types of Tessellation
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:right;">
+Numbers
+</th>
+<th style="text-align:right;">
+Mean_Area
+</th>
+<th style="text-align:right;">
+Sd_Area(km2)
+</th>
+<th style="text-align:right;">
+Sum_Area
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Raw_original
+</td>
+<td style="text-align:right;">
+3,075
+</td>
+<td style="text-align:right;">
+2,543.986
+</td>
+<td style="text-align:right;">
+3,428.2080
+</td>
+<td style="text-align:right;">
+7,822,757
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Voroni
+</td>
+<td style="text-align:right;">
+3,075
+</td>
+<td style="text-align:right;">
+2,543.986
+</td>
+<td style="text-align:right;">
+2,894.3919
+</td>
+<td style="text-align:right;">
+7,822,757
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Triangulation
+</td>
+<td style="text-align:right;">
+6,130
+</td>
+<td style="text-align:right;">
+1,262.674
+</td>
+<td style="text-align:right;">
+1,583.2598
+</td>
+<td style="text-align:right;">
+7,740,190
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Square
+</td>
+<td style="text-align:right;">
+1,635
+</td>
+<td style="text-align:right;">
+3,484.153
+</td>
+<td style="text-align:right;">
+400.9774
+</td>
+<td style="text-align:right;">
+5,696,590
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hexagon
+</td>
+<td style="text-align:right;">
+1,633
+</td>
+<td style="text-align:right;">
+3,500.747
+</td>
+<td style="text-align:right;">
+352.0933
+</td>
+<td style="text-align:right;">
+5,716,720
+</td>
+</tr>
+</tbody>
+</table>
+<p>#2.5 The different types of tessellation have different type of shapes and result that might effect on calculation on analysis, the counties tessellation is the most regulate shapes on the tessellation it gives good enough information rather the rest. The voronoi tessellation is more spread by proportion of the nearby area and it shape in variety, it used more in convex domain with connect distance. The triangulation tessellation have more on regular triangle shape than voronoi tessellation and if the point is inside the permanent circle of the triangle, it is easy to cause a sharper angle. The square and hexagon tessellation can have less edge effects and offer an alternative to square.</p>
+<pre class="r"><code>#3.1
+nid2019 &lt;- read_excel(&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/NID2019_U.xlsx&quot;) %&gt;%
+  filter(!is.na(LONGITUDE)) %&gt;% 
+  filter(!is.na(LATITUDE))
+
+dam2019 &lt;- nid2019 %&gt;%
+  st_as_sf(coords = c(&quot;LONGITUDE&quot;, &quot;LATITUDE&quot;), crs = 4326) %&gt;%
+  st_transform(5070) %&gt;%
+  st_filter(conus)</code></pre>
+<pre class="r"><code>#3.2
+point_in_polygon = function(points, polygon, id){
+    st_join(polygon, points) %&gt;%
+    st_drop_geometry() %&gt;%
+    dplyr::count(.data[[id]]) %&gt;%
+    setNames(c(id, &quot;n&quot;)) %&gt;%
+    left_join(polygon, by = id) %&gt;%
+    st_as_sf()
+}</code></pre>
+<pre class="r"><code>#3.3
+cpip = point_in_polygon(dam2019, conus_ms, &quot;geoid&quot;)
+vpip = point_in_polygon(dam2019, v_grid, &quot;id&quot;)
+tpip = point_in_polygon(dam2019, t_grid, &quot;id&quot;)
+spip = point_in_polygon(dam2019, sq_grid, &quot;id&quot;)
+hpip = point_in_polygon(dam2019, hex_grid, &quot;id&quot;)</code></pre>
+<pre class="r"><code>#3.4
+plot_tess = function(data, title)
+  {ggplot() +
+    geom_sf(data = data, aes(fill = log(n)), alpha = .9, size = .2, col = NA) +
+    scale_fill_viridis_c() +
+    theme_void() +
+    theme(legend.position = &#39;none&#39;,
+          plot.title = element_text(face = &quot;bold&quot;, color = &quot;navy&quot;, hjust = .5, size = 24)) +
+    labs(title = title,
+         caption = paste0(sum(data$n), &quot; Number of Dams &quot;))}</code></pre>
+<pre class="r"><code>#3.5
+plot_tess(cpip, &quot;Dams Counties&quot;)</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>plot_tess(vpip, &quot;Dams Voronoi&quot;)</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<pre class="r"><code>plot_tess(tpip, &quot;Dams Triangulated&quot;)</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-14-3.png" width="672" /></p>
+<pre class="r"><code>plot_tess(spip, &quot;Dams Square&quot;)</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-14-4.png" width="672" /></p>
+<pre class="r"><code>plot_tess(hpip, &quot;Dams Hexagon&quot;)</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-14-5.png" width="672" /></p>
+<p>#3.6 According to the lecture note, MAUP is a source of statistical bias that can significantly impact the results of statistical hypothesis tests. Therefore, I will choose the voronoi to moving forward because in these four results, the triangulated tessellation is out of the visualization of seeing the spread of dams in the U.S. and the square and hexagon tessellation is missing some part of the data in the western America. The voronoi tessellation is more match the counties map display and gives a good ratio visualize on the distribution of the dams in the Country.</p>
+<pre class="r"><code>#4 - 4.1
+unique(dam2019$PURPOSES) %&gt;% length</code></pre>
+<pre><code>## [1] 492</code></pre>
+<pre class="r"><code>nid_classifier = data.frame(abbr = c(&quot;C&quot;,&quot;S&quot;,&quot;P&quot;,&quot;F&quot;),
+                 purpose = c(&quot;Flood Control&quot;,&quot;Water Supply&quot;,&quot;Fire Protection&quot;,&quot;Fish and Wildlife&quot;))
+
+dam_freq &lt;- strsplit(dam2019$PURPOSES, split = &quot;&quot;) %&gt;%
+  unlist() %&gt;% 
+  table() %&gt;% 
+  as.data.frame() %&gt;% 
+  setNames(c(&quot;abbr&quot;, &quot;count&quot;)) %&gt;% 
+  left_join(nid_classifier) %&gt;% 
+  mutate(lab = paste0(purpose, &quot;\n(&quot;, abbr, &quot;)&quot;))</code></pre>
+<p>#The steps I followed on Mike instrction to indetify how many dams serve each purpose by splitting the PURPOSES values. The data what I choosing to use are Flood Control, Water Supply, Fire Protection, and Fish and Wildlife for my chosen because of the flood controls is the most important thing for natural disaster and Water Supply is huge hydrology industry provide people water usage, the fire protection is because it can avoid fire and the fish and wildlife is maintain the environment cycle.</p>
+<pre class="r"><code>#4.1 - 4.2
+
+#Flood Control
+FC_dam &lt;- dam2019 %&gt;% 
+  filter(grepl(&quot;C&quot;, dam2019$PURPOSES) == TRUE)
+point_in_polygon(FC_dam, v_grid, &quot;id&quot;) %&gt;% 
+  plot_tess(&quot;Flood Control Dams Map&quot;) +
+  theme_void() +
+  theme(legend.position = &#39;none&#39;,
+    plot.title = element_text(face = &quot;bold&quot;, color = &quot;navy&quot;, hjust = .5, size = 24)) +
+  gghighlight(n &gt; (mean(n) + sd(n)))</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code># Water Supply
+Was_dam &lt;- dam2019 %&gt;% 
+  filter(grepl(&quot;S&quot;, dam2019$PURPOSES) == TRUE)
+point_in_polygon(Was_dam, v_grid, &quot;id&quot;) %&gt;% 
+  plot_tess(&quot;Water Supply Dams Map&quot;) +
+  theme_void() +
+  theme(legend.position = &#39;none&#39;,
+          plot.title = element_text(face = &quot;bold&quot;, color = &quot;navy&quot;, hjust = .5, size = 24)) +
+  gghighlight(n &gt; (mean(n) + sd(n)))</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
+<pre class="r"><code>#Protection
+FP_dam &lt;- dam2019 %&gt;% 
+  filter(grepl(&quot;P&quot;, dam2019$PURPOSES) == TRUE)
+point_in_polygon(FP_dam, v_grid, &quot;id&quot;) %&gt;%
+  plot_tess(&quot;Fire Protection Dams Map&quot;) +
+  theme_void() +
+  theme(legend.position = &#39;none&#39;,
+          plot.title = element_text(face = &quot;bold&quot;, color = &quot;navy&quot;, hjust = .5, size = 24)) +
+  gghighlight(n &gt; (mean(n) + sd(n)))</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
+<pre class="r"><code>#Fish and Wildlife
+Faw_dam &lt;- dam2019 %&gt;% 
+  filter(grepl(&quot;F&quot;, dam2019$PURPOSES) == TRUE)
+point_in_polygon(Faw_dam, v_grid, &quot;id&quot;) %&gt;%
+  plot_tess(&quot;Fish and Wildlife Dams Map&quot;) +
+  theme_void() +
+  theme(legend.position = &#39;none&#39;,
+          plot.title = element_text(face = &quot;bold&quot;, color = &quot;navy&quot;, hjust = .5, size = 24)) +
+  gghighlight(n &gt; (mean(n) + sd(n)))</code></pre>
+<p><img src="lab-04_files/figure-html/unnamed-chunk-16-4.png" width="672" /></p>
+<p>#4.3 In the results, it matches the geographic of the distribution of dams because most of the dams are located nearby the areas of drainage basin, gulfs/bays and the mountain range. It’s good to see all these geographic of the distribution in the US geography. The flood controls are most located in side of the Mississippi River, Water Supply Dam are more located in agricultural area and shortage water area with many population. The Fire Protection are more located in the area have more forest and wood. The Fish and Wildlife area are located more in the Mid-West which is the distribution area of wildlife.</p>
 
 
 
