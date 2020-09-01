@@ -11,6 +11,7 @@ library(tidyverse)
 library(ggplot2)
 library(sf)
 library(raster)
+
 ```
 
 
@@ -28,5 +29,6 @@ bb = read_csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv") %>
 elev = get_elev_raster(bb, z = 11) %>% 
   crop(bb) %>%
   plot()
+
 ```
 
