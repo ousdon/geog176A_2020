@@ -14,31 +14,6 @@ library(raster)
 ```
 
 
-
-```{r, message = FALSE, warning = FALSE}
-bb = read_csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv") %>%
-  st_as_sf(coords = c("lng", "lat"), crs = 4326) %>% 
-  filter(city == "Goleta") %>% 
-  st_transform(5070) %>% 
-  st_buffer(5000)
-  st_bbox(bb) %>% 
-  st_as_sfc() %>% 
-  st_as_sf()
-
-elev = get_elev_raster(bb, z = 11) %>% 
-  crop(bb)
-
-plot(elev)
-
-elevtif = elev 
-elevtif[elevtif <= 0] = NA
-plot(elevtif)
-  
-writeRaster(elevtif, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif", overwrite = TRUE)
-
-```
-
-
 ```{r, message = FALSE, warning = FALSE}
 
 r = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif")
