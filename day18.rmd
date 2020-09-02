@@ -1,0 +1,69 @@
+---
+title: "day18"
+author: "Xingxin Li"
+date: "9/2/2020"
+output: html_document
+---
+
+```{r, message = FALSE, warning = FALSE}
+library(elevatr)
+library(tidyverse)
+library(ggplot2)
+library(sf)
+library(raster)
+```
+
+
+
+```{r, message = FALSE, warning = FALSE}
+bb = read_csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv") %>%
+  st_as_sf(coords = c("lng", "lat"), crs = 4326) %>% 
+  filter(city == "Goleta") %>% 
+  st_transform(5070) %>% 
+  st_buffer(5000)
+  st_bbox(bb) %>% 
+  st_as_sfc() %>% 
+  st_as_sf()
+
+elev = get_elev_raster(bb, z = 11) %>% 
+  crop(bb)
+
+plot(elev)
+
+elevtif = elev 
+elevtif[elevtif <= 0] = NA
+plot(elevtif)
+  
+writeRaster(elevtif, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif", overwrite = TRUE)
+
+```
+
+
+```{r, message = FALSE, warning = FALSE}
+
+r = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif")
+
+threshold = function(x) {ifelse(x <= 0 , NA, 1)}
+
+threshold(-100)
+
+(m = calc(r, threshold))
+
+plot(r)
+
+plot(m, col = "black")
+
+ocean_cut = m * r
+
+plot(ocean_cut, col = viridis::viridis(256))
+
+(rcl = data.frame(min = seq(0,500,100),max =  seq(100,600, 100), lab = c(0:5)))
+
+(rc = reclassify(ocean_cut, rcl, lowerTRUE = TRUE))
+
+(s = stack(r, m, ocean_cut, rc) %>% 
+  setNames(c("elevation", "land-mask", "terrain", "topography")))
+
+plot(s, col = viridis::viridis(256))
+
+```
