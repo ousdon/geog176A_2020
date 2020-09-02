@@ -38,6 +38,4 @@ writeRaster(elevtif, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1
 
 ```
 
-```{r}
-r = raster("data/goleta-elev.tif")
-```
+
