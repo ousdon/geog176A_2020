@@ -382,9 +382,11 @@ library(raster)</code></pre>
 ##                                x
 ## 1 POLYGON ((-2157749 1530385,...</code></pre>
 <pre class="r"><code>elev = get_elev_raster(bb, z = 11) %&gt;% 
-  crop(bb) %&gt;%
-  plot()</code></pre>
+  crop(bb)
+
+plot(elev)</code></pre>
 <p><img src="day17_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>writeRaster(elev, filename = &quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif&quot;, overwrite = TRUE)</code></pre>
 
 
 

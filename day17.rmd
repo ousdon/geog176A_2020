@@ -29,12 +29,8 @@ elev = get_elev_raster(bb, z = 11) %>%
   crop(bb)
 
 plot(elev)
-
-elevtif = elev 
-elevtif[elevtif <= 0] = NA
-plot(elevtif)
   
-writeRaster(elevtif, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif", overwrite = TRUE)
+writeRaster(elev, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif", overwrite = TRUE)
 
 ```
 
