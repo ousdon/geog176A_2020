@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Xingxin Li" />
+
+
+<title>day19</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.0.3/leaflet.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 41px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h2 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h3 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h4 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h5 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h6 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My First Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="geog176A.html">
+    <span class="fa fa-pencil-ruler"></span>
+     
+    Geography 176A Work
+  </a>
+</li>
+<li>
+  <a href="CV.html">
+    <span class="fa fa-sticky-note"></span>
+     
+    CV
+  </a>
+</li>
+<li>
+  <a href="day-07.html">
+    <span class="fa fa-accusoft"></span>
+     
+    day-07
+  </a>
+</li>
+<li>
+  <a href="day13.html">
+    <span class="fa fa-accusoft"></span>
+     
+    day-13
+  </a>
+</li>
+<li>
+  <a href="day16.html">
+    <span class="fa fa-accusoft"></span>
+     
+    day-16
+  </a>
+</li>
+<li>
+  <a href="lab2.html">
+    <span class="fa fa-accusoft"></span>
+     
+    Lab2
+  </a>
+</li>
+<li>
+  <a href="lab3.html">
+    <span class="fa fa-accusoft"></span>
+     
+    Lab3
+  </a>
+</li>
+<li>
+  <a href="lab-04.html">
+    <span class="fa fa-accusoft"></span>
+     
+    Lab4
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/ousdon/geog176a-lab1">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">day19</h1>
+<h4 class="author">Xingxin Li</h4>
+<h4 class="date">9/3/2020</h4>
+
+</div>
+
+
+<pre class="r"><code>library(tidyverse)
+library(sf)
+library(raster)
+library(elevatr)
+library(osmdata)
+library(leaflet)</code></pre>
+<pre class="r"><code>bb = read_csv(&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv&quot;) %&gt;%
+  st_as_sf(coords = c(&quot;lng&quot;, &quot;lat&quot;), crs = 4326) %&gt;% 
+  filter(city == &quot;Goleta&quot;) %&gt;% 
+  st_transform(5070) %&gt;% 
+  st_buffer(5000)
+  st_bbox(bb) %&gt;% 
+  st_as_sfc() %&gt;% 
+  st_as_sf()</code></pre>
+<pre><code>## Simple feature collection with 1 feature and 0 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: -2157749 ymin: 1530385 xmax: -2147749 ymax: 1540385
+## projected CRS:  NAD83 / Conus Albers
+##                                x
+## 1 POLYGON ((-2157749 1530385,...</code></pre>
+<pre class="r"><code>elev = get_elev_raster(bb, z = 11) %&gt;% 
+  crop(bb)
+
+plot(elev)</code></pre>
+<p><img src="day19_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>writeRaster(elev, filename = &quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif&quot;, overwrite = TRUE)</code></pre>
+<pre class="r"><code>r = raster(&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/goletaelev.tif&quot;)
+
+threshold = function(x) {ifelse(x &lt;= 0 , NA, 1)}
+
+threshold(-100)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>m = calc(r, threshold)
+
+plot(r)</code></pre>
+<p><img src="day19_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>plot(m, col = &quot;black&quot;)</code></pre>
+<p><img src="day19_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code>ocean_cut = m * r
+
+plot(ocean_cut, col = viridis::viridis(256))</code></pre>
+<p><img src="day19_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<pre class="r"><code>rcl = data.frame(min = seq(0,500,100),max =  seq(100,600, 100), lab = c(0:5))
+
+rc = reclassify(ocean_cut, rcl, lowerTRUE = TRUE)
+
+s = stack(r, m, ocean_cut, rc) %&gt;%
+  setNames(c(&quot;elevation&quot;, &quot;land-mask&quot;, &quot;terrain&quot;, &quot;topography&quot;))
+
+plot(s, col = viridis::viridis(256))</code></pre>
+<p><img src="day19_files/figure-html/unnamed-chunk-3-4.png" width="672" /></p>
+<pre class="r"><code>addr = elev %&gt;%
+  st_bbox(s) %&gt;%
+  st_as_sfc() %&gt;%
+  st_transform(4326)
+
+osm = osmdata::opq(addr) %&gt;% 
+  add_osm_feature(key = &#39;amenity&#39;, value = &quot;restaurant&quot;) %&gt;% 
+  osmdata_sf()
+
+resta = osm$osm_point %&gt;% 
+  dplyr::select(osm_id, name, amenity) %&gt;%
+  filter(!is.na(name))
+
+leaf = resta %&gt;% 
+  st_transform(crs(s)) %&gt;% 
+  st_intersection(st_as_sfc(st_bbox(elev))) %&gt;% 
+  mutate(elev = raster::extract(elev, resta))
+
+leaflet() %&gt;%
+  addTiles() %&gt;%
+  addMarkers(data = resta, label = ~name, popup = leaf)</code></pre>
+<div id="htmlwidget-3c951c6443c6b81add5a" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3c951c6443c6b81add5a">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[[34.4417243,34.4430236,34.4171138,34.4298894,34.428969,34.4295883,34.4298105,34.4118967,34.4295199,34.4303938,34.4293963,34.4311699,34.4311362,34.4304664,34.4305277,34.4304556,34.436135,34.4283907,34.4409167,34.4416203],[-119.8256961,-119.8801197,-119.8291443,-119.8670623,-119.869457,-119.8722792,-119.8670706,-119.8548208,-119.8692497,-119.882268,-119.876892,-119.8739299,-119.8738376,-119.8724644,-119.8723609,-119.8722312,-119.8158627,-119.8687815,-119.8240939,-119.824618],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},{"osm_id":["1348747781","1396621915","1672878332","2448210457","2487442406","3659156349","5416803496","5600999815","5805070254","6031493146","6031493148","6031493361","6031493366","6031493392","6031493393","6031493394","6035874848","6038125939","6401616641","6401616966"],"name":["Masala Spice Indian Cuisine","Frog Bar and Grill","Beachside Cafe","Sam's To Go","Rusty's Pizza Parlor","Los Agaves","Lucky Dragon","PokiRito","Ca'Dario Cucina Italiana","Cal Taco","Itsuki Japanese Restaurant","Jeannine's","Sharky's Woodfired Mexican Grill","Pieology Pizzeria","Choppa Poke","Kyle's Kitchen","Breakfast Café","Ming Dynasty","Kyle's Kitchen","Sushi Teri"],"amenity":["restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant","restaurant"],"geometry":[{"type":"Point","coordinates":[-2149604.81050398,1535239.41119306]},{"type":"Point","coordinates":[-2154375.23474889,1536612.54549032]},{"type":"Point","coordinates":[-2150592.17576288,1532651.61076149]},{"type":"Point","coordinates":[-2153587.09699045,1534894.05822007]},{"type":"Point","coordinates":[-2153824.19253567,1534848.64154892]},{"type":"Point","coordinates":[-2154056.25807217,1534979.68193473]},{"type":"Point","coordinates":[-2153590.02256886,1534885.70075363]},{"type":"Point","coordinates":[-2153005.54012612,1532667.90800857]},{"type":"Point","coordinates":[-2153790.57246827,1534903.61020834]},{"type":"Point","coordinates":[-2154916.12563195,1535293.37707889]},{"type":"Point","coordinates":[-2154469.02578311,1535063.4524757]},{"type":"Point","coordinates":[-2154158.09679463,1535188.39652171]},{"type":"Point","coordinates":[-2154150.88116464,1535182.65438027]},{"type":"Point","coordinates":[-2154048.21024757,1535078.98426146]},{"type":"Point","coordinates":[-2154037.36478838,1535083.27754075]},{"type":"Point","coordinates":[-2154027.91289925,1535072.52879402]},{"type":"Point","coordinates":[-2148891.26526917,1534411.56963559]},{"type":"Point","coordinates":[-2153780.59775875,1534770.697742]},{"type":"Point","coordinates":[-2149485.69993037,1535115.68999653]},{"type":"Point","coordinates":[-2149512.47337125,1535203.76008667]}],"elev":[13,46,1,13,11,13,13,15,12,17,12,16,16,14,15,14,14,11,13,13]},null,null,null,["Masala Spice Indian Cuisine","Frog Bar and Grill","Beachside Cafe","Sam's To Go","Rusty's Pizza Parlor","Los Agaves","Lucky Dragon","PokiRito","Ca'Dario Cucina Italiana","Cal Taco","Itsuki Japanese Restaurant","Jeannine's","Sharky's Woodfired Mexican Grill","Pieology Pizzeria","Choppa Poke","Kyle's Kitchen","Breakfast Café","Ming Dynasty","Kyle's Kitchen","Sushi Teri"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[34.4118967,34.4430236],"lng":[-119.882268,-119.8158627]}},"evals":[],"jsHooks":[]}</script>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
