@@ -85,17 +85,11 @@ leaf = resta %>%
   st_intersection(st_as_sfc(st_bbox(elev))) %>% 
   mutate(elev = raster::extract(elev, resta))
 
-leaflet() %>%
-  addTiles() %>%
-  addMarkers(data = resta, label = ~name, popup = ~leaf)
+icons = awesomeIcons(icon = 'coffee', markerColor = "blue", library = 'fa', spin = TRUE)
+
+leaflet(data = resta) %>%
+  addProviderTiles(providers$CartoDB) %>% 
+  addAwesomeMarkers(icon = icons, label = ~name, popup = leaf)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
