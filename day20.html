@@ -373,74 +373,32 @@ library(sp)
 library(rasterVis)</code></pre>
 <pre class="r"><code>params = c(&quot;tmax&quot;, &quot;tmin&quot;, &quot;prcp&quot;, &quot;srad&quot;)
 
-Washi = USAboundaries::us_states() %&gt;% filter(name == &quot;Washington&quot;)
+AOI = USAboundaries::us_states() %&gt;% filter(name == &quot;Washington&quot;)
 
-s = getTerraClim(Washi, params, startDate = &quot;2018-06-01&quot;) %&gt;% 
+s = getTerraClim(AOI, params, startDate = &quot;2018-06-01&quot;) %&gt;% 
   stack() %&gt;% 
   setNames(params)
 plot(s)</code></pre>
 <p><img src="day20_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <pre class="r"><code>#max
-values_tmax = s$tmax %&gt;%
-  values()
+values = values(s)
 
-idx = which(!is.na(values_tmax))
-v = na.omit(values_tmax)
+idx = which(!is.na(values))
+
+v = na.omit(values)
+
 vs = scale(v)
 
-Emax = kmeans(vs, 5, iter.max = 100)
+e = kmeans(vs, 5, iter.max = 100)
+
 clus_raster = s$tmax
+
 values(clus_raster) = NA
-clus_raster[idx] &lt;- Emax$cluster
+
+clus_raster[idx] &lt;- e$cluster
 
 plot(clus_raster, col = RColorBrewer::brewer.pal(5, &quot;Spectral&quot;))</code></pre>
 <p><img src="day20_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
-<pre class="r"><code>#min
-values_tmin = s$tmin %&gt;%
-  values()
-
-idx = which(!is.na(values_tmin))
-v2 = na.omit(values_tmin)
-vs = scale(v2)
-
-Emin = kmeans(vs, 5, iter.max = 100)
-clus_rasterM = s$tmin
-values(clus_rasterM) = NA
-clus_rasterM[idx] &lt;- Emin$cluster
-
-plot(clus_rasterM, col = RColorBrewer::brewer.pal(5, &quot;Spectral&quot;))</code></pre>
-<p><img src="day20_files/figure-html/unnamed-chunk-2-3.png" width="672" /></p>
-<pre class="r"><code>#prcp
-values_prcp = s$prcp %&gt;%
-  values()
-
-idx = which(!is.na(values_prcp))
-v3 = na.omit(values_prcp)
-vs = scale(v3)
-
-Eprcp = kmeans(vs, 5, iter.max = 100)
-clus_rasterP = s$prcp
-values(clus_rasterP) = NA
-clus_rasterP[idx] &lt;- Eprcp$cluster
-
-plot(clus_rasterP, col = RColorBrewer::brewer.pal(5, &quot;Spectral&quot;))</code></pre>
-<p><img src="day20_files/figure-html/unnamed-chunk-2-4.png" width="672" /></p>
-<pre class="r"><code>#srad
-values_srad = s$srad %&gt;%
-  values()
-
-idx = which(!is.na(values_srad))
-clus_rasterM = s$srad
-v4 = na.omit(values_srad)
-vs = scale(v4)
-
-Esrad = kmeans(vs, 5, iter.max = 100)
-clus_rasterS = s$srad
-values(clus_rasterS) = NA
-clus_rasterS[idx] &lt;- Esrad$cluster
-
-plot(clus_rasterS, col = RColorBrewer::brewer.pal(5, &quot;Spectral&quot;))</code></pre>
-<p><img src="day20_files/figure-html/unnamed-chunk-2-5.png" width="672" /></p>
 
 
 

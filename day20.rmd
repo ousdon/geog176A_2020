@@ -22,73 +22,33 @@ library(rasterVis)
 ```{r, message = FALSE, warning = FALSE}
 params = c("tmax", "tmin", "prcp", "srad")
 
-Washi = USAboundaries::us_states() %>% filter(name == "Washington")
+AOI = USAboundaries::us_states() %>% filter(name == "Washington")
 
-s = getTerraClim(Washi, params, startDate = "2018-06-01") %>% 
+s = getTerraClim(AOI, params, startDate = "2018-06-01") %>% 
   stack() %>% 
   setNames(params)
 plot(s)
 
 #max
-values_tmax = s$tmax %>%
-  values()
+values = values(s)
 
-idx = which(!is.na(values_tmax))
-v = na.omit(values_tmax)
+idx = which(!is.na(values))
+
+v = na.omit(values)
+
 vs = scale(v)
 
-Emax = kmeans(vs, 5, iter.max = 100)
+e = kmeans(vs, 5, iter.max = 100)
+
 clus_raster = s$tmax
+
 values(clus_raster) = NA
-clus_raster[idx] <- Emax$cluster
+
+clus_raster[idx] <- e$cluster
 
 plot(clus_raster, col = RColorBrewer::brewer.pal(5, "Spectral"))
 
-#min
-values_tmin = s$tmin %>%
-  values()
 
-idx = which(!is.na(values_tmin))
-v2 = na.omit(values_tmin)
-vs = scale(v2)
-
-Emin = kmeans(vs, 5, iter.max = 100)
-clus_rasterM = s$tmin
-values(clus_rasterM) = NA
-clus_rasterM[idx] <- Emin$cluster
-
-plot(clus_rasterM, col = RColorBrewer::brewer.pal(5, "Spectral"))
-
-#prcp
-values_prcp = s$prcp %>%
-  values()
-
-idx = which(!is.na(values_prcp))
-v3 = na.omit(values_prcp)
-vs = scale(v3)
-
-Eprcp = kmeans(vs, 5, iter.max = 100)
-clus_rasterP = s$prcp
-values(clus_rasterP) = NA
-clus_rasterP[idx] <- Eprcp$cluster
-
-plot(clus_rasterP, col = RColorBrewer::brewer.pal(5, "Spectral"))
-
-#srad
-values_srad = s$srad %>%
-  values()
-
-idx = which(!is.na(values_srad))
-clus_rasterM = s$srad
-v4 = na.omit(values_srad)
-vs = scale(v4)
-
-Esrad = kmeans(vs, 5, iter.max = 100)
-clus_rasterS = s$srad
-values(clus_rasterS) = NA
-clus_rasterS[idx] <- Esrad$cluster
-
-plot(clus_rasterS, col = RColorBrewer::brewer.pal(5, "Spectral"))
 ```
 
 
