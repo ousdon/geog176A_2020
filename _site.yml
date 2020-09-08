@@ -12,15 +12,6 @@ navbar:
     - text: "CV"
       icon: fa-sticky-note
       href: CV.html
-    - text: "day-07"
-      icon: fa-accusoft
-      href: day-07.html
-    - text: "day-13"
-      icon: fa-accusoft
-      href: day13.html
-    - text: "day-16"
-      icon: fa-accusoft
-      href: day16.html
     - text: "Lab2"
       icon: fa-accusoft
       href: lab2.html
@@ -30,6 +21,9 @@ navbar:
     - text: "Lab4"
       icon: fa-accusoft
       href: lab-04.html
+    - text: "Lab5"
+      icon: fa-accusoft
+      href: lab05.html
   right:
     - icon: fa-github
       href: https://github.com/ousdon/geog176a-lab1

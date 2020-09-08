@@ -14,11 +14,12 @@ library(mapview)
 library(osmdata)
 library(getlandsat)
 library(leaflet)
+library(units)
+library(factoextra)
 ```
 
 ``````{r, message = FALSE, warning = FALSE}
-#Find AOI
-#Q1.1
+#Q1 Find AOI
 
 bb = read.csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv") %>%
   filter(city == "Palo") %>%
@@ -32,22 +33,10 @@ bb = read.csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv") %>
 mapview(bb)
 ```
 
-``````{r, message = FALSE, warning = FALSE}
-#OSM Example
-#Q1.2
 
-bwgs = st_transform(bb, 4326)
-
-osm = osmdata::opq(bwgs) %>% 
- osmdata::add_osm_feature("building") %>% 
-  osmdata::osmdata_sf()
- 
-mapview(osm$osm_polygons)
-```
 
 ```{r, message = FALSE, warning = FALSE}
-#landset discovery space and time
-#Q2.1
+#Q2.1 landset discovery space and time
 
 bbwgs = bb %>% st_transform(4326)
 
@@ -64,7 +53,7 @@ write.csv(down, file = "/Users/xingxin/Github/geog176a-summer-2020-lab1/palo-flo
 ```
 
 ```{r, message = FALSE, warning = FALSE}
-#Q2.2-2.3
+#Q2.2-2.3 crop
 
 meta = read_csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/palo-flood-scene.csv")
 
@@ -85,15 +74,31 @@ r = crop(s, cropper)
 
 ```
 
+#Q2.4
 
 ```{r, message = FALSE, warning = FALSE}
 #Q3 plotting
 
-par(mfrow = c(2,2))
-plotRGB(r, r = 4, g = 2, b = 2, stretch = "lin")
+#rgb
+par(mfrow = c(1,2))
+plotRGB(r, r = 4, g = 3, b = 2, stretch = "lin")
+plotRGB(r, r = 4, g = 3, b = 2, stretch = "hist")
+
+#nir-rg
+par(mfrow = c(1,2))
+plotRGB(r, r = 5, g = 4, b = 3, stretch = "lin")
 plotRGB(r, r = 5, g = 4, b = 3, stretch = "hist")
+
+#nir-swir1-r
+par(mfrow = c(1,2))
+plotRGB(r, r = 6, g = 5, b = 4, stretch = "lin")
 plotRGB(r, r = 6, g = 5, b = 4, stretch = "hist")
-dev.off()
+
+#g-nir-b,my choice
+par(mfrow = c(1,2))
+plotRGB(r, r = 3, g = 6, b = 2, stretch = "lin")
+plotRGB(r, r = 3, g = 6, b = 2, stretch = "hist")
+
 ```
 
 
@@ -102,51 +107,130 @@ dev.off()
 
 #ndvi
 ndvi = (r$band5 - r$band4) / (r$band5 + r$band4)
-plot(ndvi)
-
 palette1 = colorRampPalette(c("blue", "white", "red"))
 plot(ndvi, col = palette1(256))
 
 #ndwi
 ndwi = (r$band3 - r$band5) / (r$band3 + r$band5)
-plot(ndvi)
-
 palette2 = colorRampPalette(c("blue", "white", "red"))
 plot(ndwi, col = palette2(256))
 
 #mndvi
 mndvi = (r$band3 - r$band6) / (r$band3 + r$band6)
-plot(mndvi)
-
 palette3 = colorRampPalette(c("blue", "white", "red"))
 plot(mndvi, col = palette3(256))
 
 #wri
 wri = (r$band3 + r$band4) / (r$band5 + r$band4)
-plot(wri)
-
 palette4 = colorRampPalette(c("blue", "white", "red"))
 plot(wri, col = palette4(256))
 
 #swi
 swi = 1 / sqrt(r$band2 - r$band6)
-plot(swi)
-
 palette5 = colorRampPalette(c("blue", "white", "red"))
-plot(ndvi, col = palette5(256))
+plot(swi, col = palette5(256))
 ```
 
 ```{r, message = FALSE, warning = FALSE}
 #Q4.2 Thresholding
+#NDVI
+thresholdingN = function(x){ifelse(x <= 0, 1, NA)}
 
-thresholding = function(x){ifelse(x <= 0, 1, NA)}
-
-thresholding(100)
-thresholding(-100)
-
-flood = calc(ndvi, thresholding)
+flood = calc(ndvi, thresholdingN)
 plot(flood, col = "blue")
 
-mapview(flood)
+#ndwi
+thresholdingD = function(x){ifelse(x >= 0, 1, NA)}
+
+flood2 = calc(ndwi, thresholdingD)
+plot(flood2, col = "blue")
+
+#mndvi
+thresholdingM = function(x){ifelse(x >= 0, 1, NA)}
+
+flood3 = calc(mndvi, thresholdingM)
+plot(flood3, col = "blue")
+
+#wri
+thresholdingW = function(x){ifelse(x >= 1, 1, NA)}
+
+flood4 = calc(wri, thresholdingW)
+plot(flood4, col = "blue")
+
+#swi
+thresholdingS = function(x){ifelse(x <= 5, 1, NA)}
+
+flood5 = calc(swi, thresholdingS)
+plot(flood5, col = "blue")
+
+
+#stack
+flood_stacks = stack(flood, flood2, flood3, flood4, flood5)%>%
+  setNames(c("ndvi", "ndwi", "mndvi", "wri", "swi" ))
+plot(flood_stacks, col ="blue")
+```
+
+```{r, message = FALSE, warning = FALSE}
+#Q5.1 set.seed
+set.seed(09032020) 
+
+dim(r)
+v = getValues(r) 
+
+dim(v)
+idx = which(!is.na(v))
+v = na.omit(v)
+```
+
+
+```{r, message = FALSE, warning = FALSE}
+#5.2 extract and check
+k2 = kmeans(v, 12, iter.max = 100)
+
+knew_raster = ndvi
+values(knew_raster) = NA
+knew_raster[idx] <- k2$cluster
+
+plot(knew_raster)
+```
+
+```{r, message = FALSE, warning = FALSE}
+#5.3 flood category
+k3 = kmeans(v, 6, iter.max = 100)
+knew_raster3 = ndvi
+values(knew_raster3) = NA
+knew_raster3[idx] <- k3$cluster
+
+
+flood_raster_stacks = addLayer(flood_stacks, knew_raster3)
+plot(flood_raster_stacks, col = RColorBrewer::brewer.pal(5, "Spectral"))
+```
+
+
+
+
+```{r, message = FALSE, warning = FALSE}
+#6 Plot-Print
+andvi = cellStats(flood, stat = 'sum') 
+andwi = cellStats(flood2, stat = 'sum')
+amndvi = cellStats(flood3, stat ='sum') 
+awri = cellStats(flood4, stat = 'sum') 
+aswi = cellStats(flood5, stat = 'sum')
+aknew3 = cellStats(knew_raster3, stat = 'sum')
+
+flood_summary = bind_rows(andvi = cellStats(flood, stat = 'sum'), 
+andwi = cellStats(flood2, stat = 'sum'),
+amndvi = cellStats(flood3, stat ='sum'), 
+awri = cellStats(flood4, stat = 'sum'), 
+aswi = cellStats(flood5, stat = 'sum'),
+aknew3 = cellStats(knew_raster3, stat = 'sum'))
+
+knitr::kable(flood_summary,
+caption = "Flood Summary",
+format.args = list(big.mark = ",")) %>%
+kableExtra::kable_styling("basic", full_width = TRUE, font_size = 16)
+mapview(flood_raster_stacks, col = RColorBrewer::brewer.pal(5, "Spectral"))
 
 ```
+
+
