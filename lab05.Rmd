@@ -54,7 +54,6 @@ write.csv(down, file = "/Users/xingxin/Github/geog176a-summer-2020-lab1/palo-flo
 
 ```{r, message = FALSE, warning = FALSE}
 #Q2.2-2.3 crop
-
 meta = read_csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/palo-flood-scene.csv")
 
 files = lsat_scene_files(meta$download_url) %>%
