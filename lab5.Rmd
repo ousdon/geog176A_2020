@@ -73,7 +73,17 @@ r = crop(s, cropper)
 
 ```
 
-#Q2.4
+#Q2.3 Question
+
+
+The dimension I stacks has 7811 rows and 7681 columns, 6 layers. The CRS is WGS84, the cell resolution is x =30, y = 30. 
+
+
+
+
+#Q2.4 Question
+
+The dimension I cropped has 340 rows and 346 columns, 6 layers. The CRS is WGS84, the cell resolution is x =30, y = 30. 
 
 ```{r, message = FALSE, warning = FALSE}
 #Q3 plotting
@@ -169,14 +179,16 @@ flood_stacks = stack(flood, flood2, flood3, flood4, flood5)%>%
 plot(flood_stacks, col ="blue")
 ```
 
+#4.4 Question
+
+
+In these five images, they all showing the floods around the river, However, the ndvi, ndwi, and wri look familiar compared with mndvi and swi because of the calculation and water threshold are different.
+
 ```{r, message = FALSE, warning = FALSE}
 #Q5.1 set.seed
 set.seed(09032020) 
-
-dim(r)
 v = getValues(r) 
 
-dim(v)
 idx = which(!is.na(v))
 v = na.omit(v)
 ```
@@ -190,19 +202,25 @@ knew_raster = ndvi
 values(knew_raster) = NA
 knew_raster[idx] <- k2$cluster
 
-plot(knew_raster)
+plot(knew_raster, col = RColorBrewer::brewer.pal(5, "Spectral"))
 ```
+
+#5.2 Question
+
+
+The data was extract in 2 datasets and one of the datasets has 340 346 6 in the sets and the which is tolds there's 117640 total rows and column in 6 layers.
+
 
 ```{r, message = FALSE, warning = FALSE}
 #5.3 flood category
-k3 = kmeans(v, 6, iter.max = 100)
-knew_raster3 = ndvi
+k3 = kmeans(v, 12, iter.max = 100)
+knew_raster3 = knew_raster
 values(knew_raster3) = NA
 knew_raster3[idx] <- k3$cluster
 
 
 flood_raster_stacks = addLayer(flood_stacks, knew_raster3)
-plot(flood_raster_stacks, col = RColorBrewer::brewer.pal(5, "Spectral"))
+plot(flood_raster_stacks)
 ```
 
 
@@ -210,12 +228,12 @@ plot(flood_raster_stacks, col = RColorBrewer::brewer.pal(5, "Spectral"))
 
 ```{r, message = FALSE, warning = FALSE}
 #6 Plot-Print
-andvi = cellStats(flood, stat = 'sum') 
-andwi = cellStats(flood2, stat = 'sum')
-amndvi = cellStats(flood3, stat ='sum') 
-awri = cellStats(flood4, stat = 'sum') 
-aswi = cellStats(flood5, stat = 'sum')
-aknew3 = cellStats(knew_raster3, stat = 'sum')
+andvi = cellStats(flood, stat = 'sum')*900
+andwi = cellStats(flood2, stat = 'sum')*900
+amndvi = cellStats(flood3, stat ='sum')*900 
+awri = cellStats(flood4, stat = 'sum')*900 
+aswi = cellStats(flood5, stat = 'sum')*900
+aknew3 = cellStats(knew_raster3, stat = 'sum')*900
 
 flood_summary = bind_rows(andvi = cellStats(flood, stat = 'sum'), 
 andwi = cellStats(flood2, stat = 'sum'),
@@ -231,5 +249,9 @@ kableExtra::kable_styling("basic", full_width = TRUE, font_size = 16)
 mapview(flood_raster_stacks, col = RColorBrewer::brewer.pal(5, "Spectral"))
 
 ```
+#6 Question
+
+
+The reason I thinks the cell values not an even number is because the calc function has determine the visualization as using the integer number to making the resolution filling in the map and the map fill out the area with a similarity color to make the visuliaztion more efficient.
 
 
