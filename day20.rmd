@@ -48,7 +48,6 @@ clus_raster[idx] <- e$cluster
 
 plot(clus_raster, col = RColorBrewer::brewer.pal(5, "Spectral"))
 
-
 ```
 
 
