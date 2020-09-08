@@ -252,6 +252,6 @@ mapview(flood_raster_stacks, col = RColorBrewer::brewer.pal(5, "Spectral"))
 #6 Question
 
 
-The reason I thinks the cell values not an even number is because the calc function has determine the visualization as using the integer number to making the resolution filling in the map and the map fill out the area with a similarity color to make the visuliaztion more efficient.
+The reason I thinks the cell values not an even number is because the calc function has determine the visualization as using the integer number to making the resolution filling in the map and the map fill out the area with a similarity color to make the visualization more efficient.
 
 
