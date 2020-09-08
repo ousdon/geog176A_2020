@@ -29,6 +29,6 @@ navbar:
       href: https://github.com/ousdon/geog176a-lab1
 output:
   html_document:
-    theme: simplex
+    theme: flatly
 
 
