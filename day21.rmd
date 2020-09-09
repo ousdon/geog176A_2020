@@ -1,0 +1,57 @@
+---
+title: "day21"
+author: "Xingxin Li"
+date: "9/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(sf)
+library(raster)
+library(elevatr)
+library(osmdata)
+library(AOI)
+library(USAboundaries)
+library(whitebox)
+```
+
+```{r, message = FALSE, warning = FALSE}
+mo = AOI::aoi_get("Mount Saint Helens") %>% 
+  AOI::aoi_buffer(.5)
+```
+
+```{r,eval=FALSE}
+elev  = elevatr::get_elev_raster(mo, z = 12)
+
+writeRaster(elev, "/Users/xingxin/Github/geog176a-summer-2020-lab1/mount_sthelens-elev.tif", overwrite = TRUE)
+
+wbt_slope("/Users/xingxin/Github/geog176a-summer-2020-lab1/mount_sthelens-elev.tif","/Users/xingxin/Github/geog176a-summer-2020-lab1/mst_slope.tif")
+
+wbt_aspect("/Users/xingxin/Github/geog176a-summer-2020-lab1/mount_sthelens-elev.tif","/Users/xingxin/Github/geog176a-summer-2020-lab1/mst_aspect.tif")
+
+wbt_hillshade("/Users/xingxin/Github/geog176a-summer-2020-lab1/mount_sthelens-elev.tif","/Users/xingxin/Github/geog176a-summer-2020-lab1/mst_hillshade.tif")
+```
+
+
+```{r, eval=TRUE}
+
+elevt = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/mst_slope.tif")
+
+slop = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/mst_slope.tif")
+  
+aspe = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/mst_aspect.tif")  
+
+hisd = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/mst_hillshade.tif")
+```
+
+
+```{r, eval=TRUE}
+plot(elevt, axe = F, box = F, col = viridis::viridis(256), main = "elevation")
+
+plot(slop, axe = F, box = F, col = terrain.colors(256), main = "slope")
+
+plot(aspe, axe = F, box = F, col = rainbow(8), main = "aspect")
+
+plot(hisd, axe = F, box = F, col = gray.colors(256, alpha = .8), main = "hillshade")
+```
