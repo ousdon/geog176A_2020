@@ -4,13 +4,46 @@ title: "Projects"
 
 In this summer of 2020, I took a GEOG 176A class based in R. It is my first time using R to work on GIS, and I am so exciting to learn R and GIS. Here is all the work I would expect to learn! 
 
-<<<<<<< HEAD
 - We are doing all the R work with github
-=======
-## [Building a project website](https://ousdon.github.io/geog176a-lab1/index.html)
+
+
+## [Lab1: Data Science Workflows](https://ousdon.github.io/geog176a-lab1/index.html)
 
 - We are doing all the R work with github 
->>>>>>> 393e610d7899fffca80cdc9868c953a3f2fe1763
-- Learning how to use R.
+- Learned how to use R and github to built a website.
 - I will try me best to learn!
+
+
+## [Lab2: Data Wrangling](https://ousdon.github.io/geog176a-lab1/lab2.html)
+
+- Learned how to practice date wrangling and visualization skills.
+- Learned how to use with real-time covid-19 data
+- Learned how to use data.frame to work with visualizing.
+
+
+## [Lab3: Projections, Distances, and Mapping](https://ousdon.github.io/geog176a-lab1/lab3.html)
+
+- Learned how to use sf and combine/unions in the crs and distance measurements.
+- Learned how to use all this functions by using R.
+- Learned how to use ggplot to create a map with all these data.
+
+
+## [Lab4: Tesselations, Spatial Joins, and Point-in-Polygon](https://ousdon.github.io/geog176a-lab1/lab-04.html)
+
+- Learned how to use tessellation to work with the dam data.
+- Learned how to use use point-in-polygon with tessellation plots that use in the visualization the dam data.
+- Learned how to use dam data to observe the location and geography
+
+
+## [Lab5: Raster Analysis](https://ousdon.github.io/geog176a-lab1/lab5.html)
+
+- Learned how to use raster data to analyze a flood event near Palo, Iowa
+- Learned how to use entire workflow from data acquisition to analyze the 
+- Learned how to calculate the classfication the event and difference.
+
+
+## [Lab6: Terrain Analysis]()
+
+
+
 
