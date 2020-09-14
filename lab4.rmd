@@ -1,5 +1,6 @@
 ---
 title: "Lab 4"
+subtitle: "Tesselations, Spatial Joins, and Point-in-Polygon"
 author: "Xingxin Li"
 date: "8/27/2020"
 output: html_document

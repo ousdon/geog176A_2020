@@ -1,5 +1,6 @@
 ---
 title: "Lab 6"
+subtitle: "Terrain Analysis"
 author: "Xingxin Li"
 date: "9/11/2020"
 output: html_document
@@ -178,4 +179,37 @@ plot(railways, add = TRUE, col = "green", cex = 1, pch = 16)
 ## _Question : Does that map look accurate?_
 It's accurate.
 
+#Extra Credits
+```{r message = FALSE, warning = FALSE}
+sb = AOI::aoi_get("Santa Barbara")
+
+
+offset_sb = HAND_raster %>%
+  crop(sb)
+
+hillshade_sb = hillshade %>%
+  crop(sb)
+
+gifski::save_gif({
+  for(i in 0:20) {
+    
+    build_flood = offset_sb
+    tmp[tmp > i] = NA
+    cols2 = ifelse(!is.na(raster::extract(Flood_offset, buildings_poly)), "red", "black")
+    
+    plot(hillshade, axes = FALSE, box = FALSE, col = gray.colors(256, alpha = 0.5), legend = FALSE, main = paste(sum(cols =="red"), "impacted building",stage, "foot stage"), cex = 0.5)
+
+plot(Flood_offset, add = TRUE, col2 = rev(blues9))
+
+plot(buildings_poly, add = TRUE, col = cols, cex =  .08, pch = 16)
+
+plot(railways, add = TRUE, col = "green", cex = 1, pch = 16)
+  }
+
+}, gif_file = "data/mission-creek-fim.gif",
+   width = 600, height = 600, 
+   delay = .7, loop = TRUE)
+
+
+```
 

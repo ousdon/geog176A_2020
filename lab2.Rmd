@@ -1,5 +1,6 @@
 ---
 title: "Lab 2"
+subtitle: "Data Wrangling"
 author: "Xingxin Li"
 date: "8/17/2020"
 output: html_document
