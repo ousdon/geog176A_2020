@@ -148,7 +148,7 @@ Floods = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/hand-raster.tif
 
 Flood_offset = Floods
 
-Flood_offset[Flood_offset > 10.25] = NA
+Flood_offset[Flood_offset > 10.02] = NA
 
 ```
 
