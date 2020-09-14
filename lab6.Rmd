@@ -1,0 +1,205 @@
+---
+title: "lab-06"
+author: "Xingxin Li"
+date: "9/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, out.width = "75%", fig.align = 'center')
+```
+
+
+``````{r message = FALSE, warning = FALSE}
+library(sf)        # vector manipulation
+library(raster)    # raster manipulation
+library(fasterize) # "faster" raster
+library(whitebox)  # terrain analysis
+library(dplyr)
+library(rgdal)
+library(tidyverse)
+library(AOI)
+library(osmdata)   # OSM API
+library(elevatr)   # Elevation  Web Tiles
+library(gifski)    # Gifski
+```
+
+FLooding Jaron
+
+stage = height of the water in a channel
+streamflow = the rate of water flowing in a channel
+basin = an area in which all cells contribute to a common outlet (an area or ridge of land that separates waters flowing to different rivers, basins, or seas)
+flowpath = the linear path over which water flows (river)
+HAND = Height Above Nearest Drainage, “how high is a cell above its nearest river cell?”
+
+
+```{r message = FALSE, warning = FALSE}
+#1-1.2 Collecting Data, Basin Boundary, Elevation Data
+
+basin = read_sf("https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite/USGS-11119750/basin/")
+write_sf(basin, dsn = "/Users/xingxin/Github/geog176a-summer-2020-lab1/USGS-11119750.gpkg")
+
+elev = elevatr::get_elev_raster(basin, z = 13) %>% 
+  crop(basin) %>%
+  mask(basin)
+
+elev_basin = elev * 3.281
+
+writeRaster(elev_basin, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1/mission-creek-basin-elev.tif", overwrite = TRUE)
+
+```
+
+```{r message = FALSE, warning = FALSE}
+
+elev_raster = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/mission-creek-basin-elev.tif")
+
+#1.3 Buildings and river-network data
+bb = st_bbox(basin) %>%
+  st_as_sfc() %>%
+  st_transform(4326)
+
+#Building
+
+buildings = osmdata::opq(bb) %>% 
+  add_osm_feature(key = "building") %>% 
+  osmdata_sf()
+
+#Railways
+
+railway = opq(bb) %>% 
+  add_osm_feature(key = 'railway', value = 'station' ) %>%
+  osmdata_sf()
+
+#Streams
+stream = osmdata::opq(bb) %>% 
+  add_osm_feature(key = 'waterway', value = "stream") %>%
+  osmdata_sf() 
+
+```
+
+
+```{r message = FALSE, warning = FALSE}
+#1.3 Buildings poly and river-network and railways
+
+#buildings data
+
+buildings_points = buildings$osm_lines %>% 
+  st_intersection(basin) %>%
+  st_transform(crs(basin)) 
+
+buildings_poly = buildings$osm_polygons %>% 
+  st_intersection(basin) %>%
+  st_transform(crs(basin)) %>%
+  st_centroid()
+
+#railways data
+
+railways = railway$osm_points %>% 
+  st_intersection(basin) 
+
+#streams data
+
+streams = stream$osm_lines %>% 
+  st_intersection(basin) 
+```
+
+
+```{r message = FALSE, warning = FALSE}
+#2.1 Terrain Analysis
+
+##Hillshade
+##River-raster
+
+wbt_hillshade("/Users/xingxin/Github/geog176a-summer-2020-lab1/mission-creek-basin-elev.tif","/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt-hillside.tif")
+
+hillshade = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt-hillside.tif")
+
+plot(hillshade, axes = FALSE, box = FALSE, col = gray.colors(256, alpha = 0.5), main = "Hillshade", legend = FALSE)
+plot(streams$geometry, add = TRUE, col = "navy")
+plot(basin$geometry, add = TRUE)
+```
+
+```{r message = FALSE, warning = FALSE}
+#2.2.1 Height Above Nearest Drainage - River Raster
+
+river_raster = streams %>%
+  st_transform(5070) %>%
+  st_buffer(10) %>%
+  st_transform(crs(elev_raster))
+
+stream_raster = fasterize::fasterize(river_raster, elev_basin)
+
+writeRaster(stream_raster, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1/river-raster.tif", overwrite = TRUE)
+
+```
+
+
+
+```{r message = FALSE, warning = FALSE}
+
+##2.2.2 Height Above Nearest Drainage - Hydrologically Corrected Surface
+
+streams_raster = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/river-raster.tif")
+
+wbt_breach_depressions("/Users/xingxin/Github/geog176a-summer-2020-lab1/mission-creek-basin-elev.tif","/Users/xingxin/Github/geog176a-summer-2020-lab1/hydro-corr-surf-elev.tif")
+
+wbt_elevation_above_stream("/Users/xingxin/Github/geog176a-summer-2020-lab1/hydro-corr-surf-elev.tif","/Users/xingxin/Github/geog176a-summer-2020-lab1/river-raster.tif", "/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt_elevation_above_stream.tif")
+
+```
+
+```{r message = FALSE, warning = FALSE}
+
+##2.2.3 Height Above Nearest Drainage - HAND Raster
+
+HAND = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt_elevation_above_stream.tif")
+
+HAND_raster = HAND + 3.69
+
+streams_raster = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/river-raster.tif")
+
+HAND_raster[streams_raster == 1] = 0
+
+writeRaster(HAND_raster, filename = "/Users/xingxin/Github/geog176a-summer-2020-lab1/hand-raster.tif", overwrite = TRUE)
+
+```
+
+
+```{r message = FALSE, warning = FALSE}
+
+#3.1 2017 Impact Assessment
+
+Floods = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/hand-raster.tif")
+
+Flood_map = Floods
+
+Flood_map[Flood_map > 10.02] = NA
+
+```
+
+
+```{r message = FALSE, warning = FALSE}
+#3.2 Plots
+plot(hillshade, axes = FALSE, box = FALSE, col= gray.colors(256, alpha = .5), legend=FALSE)
+
+plot(Flood_map, add=TRUE, col= rev(blues9), legend=FALSE)
+
+plot(railways$geometry, add=TRUE, col= "green", cex=1, pch=16)
+```
+
+```{r message = FALSE, warning = FALSE}
+
+cols = ifelse(!is.na(raster::extract(Flood_map, buildings_poly)), "red", "black")
+
+Flood_map[Flood_map >= 10.02] = NA
+
+plot(hillshade, axes = FALSE, box = FALSE, col = gray.colors(256, alpha = 0.5), legend = FALSE, main = paste(sum(cols =="red"), "impacted building"," 10.02 foot stage"), cex = 0.5)
+
+plot(Flood_map, add = TRUE, col = rev(blues9))
+
+plot(buildings_poly, add = TRUE, col = cols, cex =  .08, pch = 16)
+
+plot(railways, add = TRUE, col = "green", cex = 1, pch = 16)
+
+plot(basin$geometry, add = TRUE, border = "black")
+
+```

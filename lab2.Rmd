@@ -5,7 +5,11 @@ date: "8/17/2020"
 output: html_document
 ---
 
-```{r setup, message = FALSE, warning = FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, out.width = "75%", fig.align = 'center')
+```
+
+```{r message=FALSE, warning=FALSE}
 library(dplyr) 
 library(ggplot2)
 library(tidyverse)
@@ -23,7 +27,7 @@ head(covid)
 ```
 
 # Question 1
-``` {r, message = FALSE, warning = FALSE}
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 #  California, the daily new cases
 dat = covid %>% 
   filter(state == "California") %>% 
@@ -33,7 +37,7 @@ dat = covid %>%
   filter(date == max(date)) 
 ```
 
-``` {r, message = FALSE, warning = FALSE}
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 #  the 5 counties with the most cumulative cases
 most_cum_cases = dat %>% 
   slice_max(cases, n = 5) %>% 
@@ -44,7 +48,8 @@ knitr::kable(most_cum_cases,
              col.names = c("County", "cumulative Cases"))
 
 ```
-``` {r, message = FALSE, warning = FALSE}
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 # the 5 counties with the most NEW cases
 most_new_cases = dat %>% 
   slice_max(newCases, n = 5) %>% 
@@ -54,7 +59,8 @@ knitr::kable(most_new_cases,
              caption = "Most New Cases California Counties",
              col.names = c("County", "New Cases"))
 ```
-``` {r, message = FALSE, warning = FALSE}
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 # import population data
 PopulationEstimates <- read_excel(paste(source,"PopulationEstimates.xls",sep = ""), 
                                   skip = 2)
@@ -65,7 +71,7 @@ population_2019 = PopulationEstimates %>%
 dat2 <-inner_join(dat, population_2019, by = c("fips" = "FIPStxt"))
 ```
 
-``` {r, message = FALSE, warning = FALSE}
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 #  the 5 counties with the most cumulative cases per capita
 most_cum_cases_pc = dat2 %>%
   mutate(Cases_pc = cases/POP_ESTIMATE_2019) %>%
@@ -76,7 +82,8 @@ knitr::kable(most_cum_cases_pc,
              caption = "Most Cumulative Cases California Counties Per Capita",
              col.names = c("County", "cumulative Cases Per Capita"))
 ```
-``` {r, message = FALSE, warning = FALSE}
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 # the 5 counties with the most NEW cases per capita
 most_new_cases_pc = dat2 %>% 
   mutate(newCases_pc = newCases/POP_ESTIMATE_2019) %>%
@@ -87,7 +94,8 @@ knitr::kable(most_new_cases_pc,
              caption = "Most New Cases California Counties Per Capit",
              col.names = c("County", "New Cases Per Capit"))
 ```
-``` {r, message = FALSE, warning = FALSE}
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 # 14-days 
 per_cap = covid %>% 
   filter(state == "California") %>% 
@@ -117,7 +125,7 @@ dat_14 = per_cap %>%
  `r sum(nrow(dat_14))` 
  
  # Question 2
-```{r, message = FALSE, warning = FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # facet plot of the daily new cases and the 7-day rolling mean
 # select four states
 four_states <- covid %>%
@@ -141,7 +149,8 @@ four_states <- covid %>%
         plot.title = element_text(size = 14, face = 'bold')) +  
   facet_grid(~state, scales = "free_y")
 ```
-```{r, message = FALSE, warning = FALSE}
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # import population data
 PopulationEstimates <- read_excel(paste(source,"PopulationEstimates.xls",sep = ""), 
                                   skip = 2)
@@ -149,7 +158,7 @@ population_2019 = PopulationEstimates %>%
   select(Area_Name,POP_ESTIMATE_2019) 
 ```
 
-```{r, message = FALSE, warning = FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # facet plot of the daily new cases and the 7-day rolling mean
 # select four states per capita
 four_states_pc <- population_2019 %>%
