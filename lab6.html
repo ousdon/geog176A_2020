@@ -297,20 +297,6 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
-  <a href="day20.html">
-    <span class="fa fa-accusoft"></span>
-     
-    Day20
-  </a>
-</li>
-<li>
-  <a href="day21.html">
-    <span class="fa fa-accusoft"></span>
-     
-    Day21
-  </a>
-</li>
-<li>
   <a href="lab2.html">
     <span class="fa fa-accusoft"></span>
      
@@ -467,9 +453,9 @@ writeRaster(stream_raster, filename = &quot;/Users/xingxin/Github/geog176a-summe
 streams_raster = raster(&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/river-raster.tif&quot;)
 
 wbt_breach_depressions(&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/mission-creek-basin-elev.tif&quot;,&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/hydro-corr-surf-elev.tif&quot;)</code></pre>
-<pre><code>## [1] &quot;breach_depressions - Elapsed Time (excluding I/O): 0.99s&quot;</code></pre>
+<pre><code>## [1] &quot;breach_depressions - Elapsed Time (excluding I/O): 0.101s&quot;</code></pre>
 <pre class="r"><code>wbt_elevation_above_stream(&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/hydro-corr-surf-elev.tif&quot;,&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/river-raster.tif&quot;, &quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt_elevation_above_stream.tif&quot;)</code></pre>
-<pre><code>## [1] &quot;elevation_above_stream - Elapsed Time (excluding I/O): 0.28s&quot;</code></pre>
+<pre><code>## [1] &quot;elevation_above_stream - Elapsed Time (excluding I/O): 0.31s&quot;</code></pre>
 <pre class="r"><code>##2.2.3 Height Above Nearest Drainage - HAND Raster
 
 HAND = raster(&quot;/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt_elevation_above_stream.tif&quot;)
