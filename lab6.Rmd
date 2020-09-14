@@ -1,5 +1,5 @@
 ---
-title: "lab-06"
+title: "Lab 6"
 author: "Xingxin Li"
 date: "9/11/2020"
 output: html_document
@@ -91,7 +91,10 @@ streams = stream$osm_lines %>%
 ### _2.1 Hillshade_
 ```{r message = FALSE, warning = FALSE, echo =FALSE}
 wbt_hillshade("/Users/xingxin/Github/geog176a-summer-2020-lab1/mission-creek-basin-elev.tif","/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt-hillside.tif")
+```
 
+
+```{r message = FALSE, warning = FALSE, echo =FALSE}
 hillshade = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/wbt-hillside.tif")
 
 plot(hillshade, axes = FALSE, box = FALSE, col = gray.colors(256, alpha = 0.5), main = "Hillshade", legend = FALSE)
@@ -137,7 +140,7 @@ writeRaster(HAND_raster, filename = "/Users/xingxin/Github/geog176a-summer-2020-
 ```
 
 
-# _Question 3: 2017 Impact Assessmen_
+# _Question 3: 2017 Impact Assessment_
 ### _3.1 Map of the Flood_
 ```{r message = FALSE, warning = FALSE}
 
@@ -174,10 +177,7 @@ plot(buildings_poly, add = TRUE, col = cols, cex =  .08, pch = 16)
 plot(railways, add = TRUE, col = "green", cex = 1, pch = 16)
 
 ```
-
-```{r message = FALSE, warning = FALSE}
-#Extra Credits
-
+## _Question : Does that map look accurate?_
+It's accurate.
 
 
-```
