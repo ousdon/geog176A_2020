@@ -16,10 +16,7 @@ library(sf)        # vector manipulation
 library(raster)    # raster manipulation
 library(fasterize) # "faster" raster
 library(whitebox)  # terrain analysis
-library(dplyr)
-library(rgdal)
 library(tidyverse)
-library(AOI)
 library(osmdata)   # OSM API
 library(elevatr)   # Elevation  Web Tiles
 library(gifski)    # Gifski
