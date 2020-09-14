@@ -12,14 +12,14 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, out.width = "75%", fig.a
 
 # _Libraries_
 ```{r message = FALSE, warning = FALSE}
-library(sf)        # vector manipulation
-library(raster)    # raster manipulation
-library(fasterize) # "faster" raster
-library(whitebox)  # terrain analysis
+library(sf)        
+library(raster)    
+library(fasterize) 
+library(whitebox)  
 library(tidyverse)
-library(osmdata)   # OSM API
-library(elevatr)   # Elevation  Web Tiles
-library(gifski)    # Gifski
+library(osmdata)   
+library(elevatr)   
+library(gifski)    
 ```
 
 # _Question 1 : Collecting Data_
