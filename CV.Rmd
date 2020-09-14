@@ -3,8 +3,11 @@ title: "CV"
 author: "Xingxin Li"
 ---
 
+<center>
 
 ![](img/IMG_0458.JPG){width="40%"}
+
+</center>
 
 ## About me
  Hello, My name is Xingxin Li, I'm from China and i am major in GIS at UCSB because of GIS is one of my favorite field to learn and UCSB has a many opportunity to study GIS and more works can study. Nice to meet you all!!!
