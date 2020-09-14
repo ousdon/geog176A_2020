@@ -7,7 +7,7 @@ output: html_document
 ---
 
 # _Libraries_
-```{r, message = FALSE, warning = FALSE, echo =FALSE}
+```{r, message = FALSE, warning = FALSE}
 library(dplyr) 
 library(ggplot2)
 library(tidyverse)
