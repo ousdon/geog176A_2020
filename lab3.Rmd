@@ -5,8 +5,8 @@ subtitle: "Lab-3"
 date: "8/24/2020"
 output: html_document
 ---
-# Libraries
-```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+### _Libraries_
+```{r message=FALSE, warning=FALSE}
 # SPDS
 library(tidyverse)
 library(sf)
@@ -24,7 +24,7 @@ source = "/Users/xingxin/Github/geog176a-summer-2020-lab1/"
 
 ```
 
-# Background
+# _Background_
 In this lab, 4 main skills are covered:
 
  1. __Ingesting/Building__ _sf_ objects from R packages and CSVs. (Q1)
@@ -32,9 +32,9 @@ In this lab, 4 main skills are covered:
  3. __Calculaing__ distances (Q2)
  4. __Building__ maps using ggplot (Q3)
  
-# Question 1
+# _Question 1 : Datasets_
 ### _1.1 Define a Projection_
-```{r}
+```{r message=FALSE, warning=FALSE}
 eqdc = '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
 ```
 Description of  this projection based on the parameters:
@@ -50,14 +50,14 @@ Description of  this projection based on the parameters:
 * Units: m
  
 ### _1.2 - Get USA state boundaries_
-```{r}
+```{r message=FALSE, warning=FALSE}
 state = USAboundaries::us_states(resolution = "low") %>%
   filter(!state_name %in% c("Puerto Rico", "Alaska", "Hawaii")) %>%
   st_transform(eqdc)
 ```
 
 ### _1.3 - Get country boundaries for Mexico, the United States of America, and Canada_
-```{r}
+```{r message=FALSE, warning=FALSE}
 country = rnaturalearth::countries110
 country_sf = st_as_sf(country) %>%
   filter(admin %in% c("United States of America", "Mexico", "Canada")) %>%
@@ -65,7 +65,7 @@ country_sf = st_as_sf(country) %>%
 ```
 
 ### _1.4 - Get city locations from the CSV file_
-```{r}
+```{r message=FALSE, warning=FALSE}
 city = read_csv(paste(source,"uscities.csv",sep = "")) %>%
   select(city, state_name, county_name, population, lat, lng)
 city_sf = st_as_sf(city, coords = c("lng", "lat"), crs = 4326) %>%
@@ -74,9 +74,9 @@ city_eqdc = st_transform(city_sf, eqdc)
    
 ```
 
-# Question 2
+# _Question 2 : Distance Calculation of each USA City_
 ### _2.1 - Distance to USA Border (coastline or national) (km)_
-``` {r}
+``` {r echo=FALSE, message=FALSE, warning=FALSE}
 # Union States: state boundaries are resolved
 usa_geom = state$geometry
 usa_u_ml = st_union(usa_geom)  %>%
@@ -144,7 +144,7 @@ knitr::kable(caption = " Five Cities Farthest from Canadian Border",
 
 
 
-# Question 3
+# _Question 3 : Visualizing the Data_
 ### _3.1 Data_
 ``` {r}
 # 10 largest cities
@@ -244,8 +244,7 @@ ggplot() +
 ```
 
 
-# Question 4
-## Real World Application
+# _Question 4 : Real World Application_
 ### _4.1 Quantifing Border Zone_
 ``` {r}
 # How many cities are in this 100 mile zone? (100 miles ~ 160 kilometers)

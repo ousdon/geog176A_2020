@@ -20,7 +20,7 @@ navbar:
       href: lab3.html
     - text: "Lab4"
       icon: fa-accusoft
-      href: lab-04.html
+      href: lab4.html
     - text: "Lab5"
       icon: fa-accusoft
       href: lab5.html

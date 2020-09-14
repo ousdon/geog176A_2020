@@ -7,51 +7,54 @@ In this summer of 2020, I took a GEOG 176A class based in R. It is my first time
 - We are doing all the R work with github
 
 
-## [Lab1: Data Science Workflows](https://ousdon.github.io/geog176a-lab1/index.html)
+## [Lab 1: Data Science Workflows](https://ousdon.github.io/geog176a-lab1/index.html)
 
 - Learned how to use rstudio and installation.
 - Learned how we work all the R work with github. 
 - Learned how to use R and github to built a website.
 - Learned how to remote local data, rmd, html, and ymal publish the work.
 
+![Source : duke.edu](img/github-r.png)
 
-## [Lab2: Data Wrangling](https://ousdon.github.io/geog176a-lab1/lab2.html)
+
+## [Lab 2: Data Wrangling](https://ousdon.github.io/geog176a-lab1/lab2.html)
 
 - Learned how to practice date wrangling and visualization skills.
-- Learned how to use interacted with real-time covid-19 data
-- Learned how to use data.frame in project.
+- Interacted with real-time covid-19 data
+- Study on using data.frame in project.
 
 ![ ](img/lab2.png)
 
-## [Lab3: Projections, Distances, and Mapping](https://ousdon.github.io/geog176a-lab1/lab3.html)
+## [Lab 3: Projections, Distances, and Mapping](https://ousdon.github.io/geog176a-lab1/lab3.html)
 
-- Learned how to use sf and combine/unions in the crs and distance measurements.
-- Learned how to use all this functions by using R.
-- Learned how to use ggplot to create a map with all these data.
+- Use sf to create data frame on futher calculations and measurements.
+- Define a projection and getting cities distance and boundries data .
+- Gather all the distances calculation and use ggplot to create a map.
+- Apply in real world application
 
 ![ ](img/lab3.png)
 
-## [Lab4: Tesselations, Spatial Joins, and Point-in-Polygon](https://ousdon.github.io/geog176a-lab1/lab-04.html)
+## [Lab 4: Tesselations, Spatial Joins, and Point-in-Polygon](https://ousdon.github.io/geog176a-lab1/lab-04.html)
 
-- Learned how to use tessellation to work with the dam data.
-- Learned how to use use point-in-polygon with tessellation plots that use in the visualization the dam data.
-- Learned how to use dam data to observe the location and geography
+- Use tessellation to work with the dam data.
+- Use point-in-polygon with tessellation plots and find out the best solution.
+- Create visualization for dam data and analysis NID.
 
 ![ ](img/lab4.png)
 
-## [Lab5: Raster Analysis](https://ousdon.github.io/geog176a-lab1/lab5.html)
+## [Lab 5: Raster Analysis](https://ousdon.github.io/geog176a-lab1/lab5.html)
 
-- Learned how to use raster data to analyze a flood event near Palo, Iowa
-- Learned how to use entire workflow from data acquisition to analyze the 
-- Learned how to calculate the classfication the event and difference.
+- Use raster data to analyze a flood event near Palo, Iowa
+- Learned how to use RGB to work on the graphing.
+- calculate the kmeans to make it more accuracy on analysis.
 
 ![ ](img/lab5.png)
 
-## [Lab6: Terrain Analysis](https://ousdon.github.io/geog176a-lab1/lab6.html)
+## [Lab 6: Terrain Analysis](https://ousdon.github.io/geog176a-lab1/lab6.html)
 
-- Learned how to use raster data to analyze a flood event near Palo, Iowa
-- Learned how to use entire workflow from data acquisition to analyze the 
-- Learned how to calculate the classfication the event and difference.
+- LUse raster data and water data to create a flood map.
+- Working with terrain analysis
+- Learned how to calculate the impacted and flooding are impacted with buildings.
 
 ![ ](img/lab6.png)
 

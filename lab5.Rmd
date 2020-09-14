@@ -4,7 +4,7 @@ author: "Xingxin Li"
 date: "9/4/2020"
 output: html_document
 ---
-
+### _Libraries_
 ``````{r, message = FALSE, warning = FALSE}
 library(raster) 
 library(tidyverse)  
@@ -18,8 +18,10 @@ library(units)
 library(factoextra)
 ```
 
+
+# _Question 1 : Find AOI_
+
 ``````{r, message = FALSE, warning = FALSE}
-#Q1 Find AOI
 
 bb = read.csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv") %>%
   filter(city == "Palo") %>%
@@ -33,10 +35,9 @@ bb = read.csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/uscities.csv") %>
 mapview(bb)
 ```
 
-
-
+# _Question 2_
+### _Q2.1 landset discovery space and time_
 ```{r, message = FALSE, warning = FALSE}
-#Q2.1 landset discovery space and time
 
 bbwgs = bb %>% st_transform(4326)
 
@@ -52,8 +53,9 @@ down = scenes %>%
 write.csv(down, file = "/Users/xingxin/Github/geog176a-summer-2020-lab1/palo-flood-scene.csv")
 ```
 
+
+### _Q2.2-2.3 crop_
 ```{r, message = FALSE, warning = FALSE}
-#Q2.2-2.3 crop
 meta = read_csv("/Users/xingxin/Github/geog176a-summer-2020-lab1/palo-flood-scene.csv")
 
 files = lsat_scene_files(meta$download_url) %>%
@@ -73,21 +75,19 @@ r = crop(s, cropper)
 
 ```
 
-#Q2.3 Question
+### _Q2.3 Question_
 
 
 The dimension I stacks has 7811 rows and 7681 columns, 6 layers. The CRS is WGS84, the cell resolution is x =30, y = 30. 
 
 
-
-
-#Q2.4 Question
+### _Q2.4 Question_
 
 The dimension I cropped has 340 rows and 346 columns, 6 layers. The CRS is WGS84, the cell resolution is x =30, y = 30. 
 
+# _Question 3_
+### _Q3 plotting_
 ```{r, message = FALSE, warning = FALSE}
-#Q3 plotting
-
 #rgb
 par(mfrow = c(1,2))
 plotRGB(r, r = 4, g = 3, b = 2, stretch = "lin")
@@ -109,11 +109,9 @@ plotRGB(r, r = 3, g = 6, b = 2, stretch = "lin")
 plotRGB(r, r = 3, g = 6, b = 2, stretch = "hist")
 
 ```
-
-
+# _Question 4_
+### _Q4.1 Local Operation_
 ```{r, message = FALSE, warning = FALSE}
-#Q4.1 Local Operation
-
 #ndvi
 ndvi = (r$band5 - r$band4) / (r$band5 + r$band4)
 palette1 = colorRampPalette(c("blue", "white", "red"))
@@ -139,10 +137,9 @@ swi = 1 / sqrt(r$band2 - r$band6)
 palette5 = colorRampPalette(c("blue", "white", "red"))
 plot(swi, col = palette5(256))
 ```
-
+### _Q4.2 Thresholding_
 ```{r, message = FALSE, warning = FALSE}
-#Q4.2 Thresholding
-#NDVI
+#ndvi
 thresholdingN = function(x){ifelse(x <= 0, 1, NA)}
 
 flood = calc(ndvi, thresholdingN)
@@ -179,13 +176,14 @@ flood_stacks = stack(flood, flood2, flood3, flood4, flood5)%>%
 plot(flood_stacks, col ="blue")
 ```
 
-#4.4 Question
-
+### _4.4 Question_
 
 In these five images, they all showing the floods around the river, However, the ndvi, ndwi, and wri look familiar compared with mndvi and swi because of the calculation and water threshold are different.
 
+
+# _Question 5_
+### _Q5.1 set.seed_
 ```{r, message = FALSE, warning = FALSE}
-#Q5.1 set.seed
 set.seed(09032020) 
 v = getValues(r) 
 
@@ -193,9 +191,8 @@ idx = which(!is.na(v))
 v = na.omit(v)
 ```
 
-
+### _5.2 extract and check_
 ```{r, message = FALSE, warning = FALSE}
-#5.2 extract and check
 k2 = kmeans(v, 12, iter.max = 100)
 
 knew_raster = ndvi
@@ -205,14 +202,12 @@ knew_raster[idx] <- k2$cluster
 plot(knew_raster, col = RColorBrewer::brewer.pal(5, "Spectral"))
 ```
 
-#5.2 Question
-
+### _5.2 Question_
 
 The data was extract in 2 datasets and one of the datasets has 340 346 6 in the sets and the which is tolds there's 117640 total rows and column in 6 layers.
 
-
+### _5.3 flood category_
 ```{r, message = FALSE, warning = FALSE}
-#5.3 flood category
 k3 = kmeans(v, 12, iter.max = 100)
 knew_raster3 = knew_raster
 values(knew_raster3) = NA
@@ -224,10 +219,9 @@ plot(flood_raster_stacks)
 ```
 
 
-
-
+# _Question 6_
+### _6 Plot-Print_
 ```{r, message = FALSE, warning = FALSE}
-#6 Plot-Print
 andvi = cellStats(flood, stat = 'sum')*900
 andwi = cellStats(flood2, stat = 'sum')*900
 amndvi = cellStats(flood3, stat ='sum')*900 
@@ -249,7 +243,7 @@ kableExtra::kable_styling("basic", full_width = TRUE, font_size = 16)
 mapview(flood_raster_stacks, col = RColorBrewer::brewer.pal(5, "Spectral"))
 
 ```
-#6 Question
+### _Question_
 
 
 The reason I thinks the cell values not an even number is because the calc function has determine the visualization as using the integer number to making the resolution filling in the map and the map fill out the area with a similarity color to make the visualization more efficient.

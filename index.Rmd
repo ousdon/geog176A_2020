@@ -3,10 +3,21 @@ title: "About Me"
 ---
   
 <center>
+
 # Hi, My Name is Xingxin Li.
+
 </center>
   
-Hello!!! This is my first webpage using R to create a website, and it's very excited to using R on GIS work. I am hoping to learn more on technology that learn with GIS materials. This year is my second year at UCSB, before that, I am study at Mt. San Antonio College and work with my part-time job at restaurant and boba store. I hope this year can learn more GIS work so I can improve my skills. In this lab, I learn how to build my first website begin with R.
+Hello!!! I am a senior student at UCSB major in Geography. My favorite hobbies are reading Lonely Planet and watching Globe Trekker that followed the path they did to become a backpacker. I also have a huge passion with geography and map. This is my first time to using Rstudio and Github to create a website, and it's very excited to using R on Git work with data analysis and graphing. I am hoping to learn more on useful technology that learn with GIS materials. This year is my second year at UCSB, before that, I am study at Mt. San Antonio College and work with my part-time job at restaurant and a famous boba store. I hope this year I can learn more GIS work which I can improve my skills. In this lab, I learn how to build my first website begin with R and Github. 
 
-![Hello Welcome](img/Guilin.jpg) 
+![](img/Guilin.jpg) 
 
+---
+
+<center>
+
+Contact emails : xingxinli@ucsb.edu
+
+</center>
+
+---
