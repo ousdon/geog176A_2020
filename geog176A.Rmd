@@ -42,8 +42,11 @@ In this summer of 2020, I took a GEOG 176A class based in R. It is my first time
 - Learned how to calculate the classfication the event and difference.
 
 
-## [Lab6: Terrain Analysis]()
+## [Lab6: Terrain Analysis](https://ousdon.github.io/geog176a-lab1/lab6.html)
 
+- Learned how to use raster data to analyze a flood event near Palo, Iowa
+- Learned how to use entire workflow from data acquisition to analyze the 
+- Learned how to calculate the classfication the event and difference.
 
 
 
