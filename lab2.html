@@ -297,20 +297,6 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
-  <a href="day20.html">
-    <span class="fa fa-accusoft"></span>
-     
-    Day20
-  </a>
-</li>
-<li>
-  <a href="day21.html">
-    <span class="fa fa-accusoft"></span>
-     
-    Day21
-  </a>
-</li>
-<li>
   <a href="lab2.html">
     <span class="fa fa-accusoft"></span>
      
@@ -378,7 +364,7 @@ library(readxl)
 
 url = &#39;https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv&#39;
 read_csv(url)</code></pre>
-<pre><code>## # A tibble: 524,770 x 6
+<pre><code>## # A tibble: 531,243 x 6
 ##    date       county      state      fips  cases deaths
 ##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
 ##  1 2020-01-21 Snohomish   Washington 53061     1      0
@@ -391,7 +377,7 @@ read_csv(url)</code></pre>
 ##  8 2020-01-25 Snohomish   Washington 53061     1      0
 ##  9 2020-01-26 Maricopa    Arizona    04013     1      0
 ## 10 2020-01-26 Los Angeles California 06037     1      0
-## # … with 524,760 more rows</code></pre>
+## # … with 531,233 more rows</code></pre>
 <pre class="r"><code>source = &quot;/Users/xingxin/Github/geog176a-lab2/data/&quot;
 
 
@@ -419,7 +405,7 @@ head(covid)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Los Angeles</td>
-<td align="right">252066</td>
+<td align="right">253985</td>
 </tr>
 <tr class="even">
 <td align="left">Riverside</td>
@@ -427,15 +413,15 @@ head(covid)</code></pre>
 </tr>
 <tr class="odd">
 <td align="left">Orange</td>
-<td align="right">51758</td>
+<td align="right">52121</td>
 </tr>
 <tr class="even">
 <td align="left">San Bernardino</td>
-<td align="right">50385</td>
+<td align="right">50699</td>
 </tr>
 <tr class="odd">
 <td align="left">San Diego</td>
-<td align="right">42032</td>
+<td align="right">42742</td>
 </tr>
 </tbody>
 </table>
@@ -450,23 +436,23 @@ head(covid)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Los Angeles</td>
-<td align="right">1042</td>
+<td align="right">809</td>
 </tr>
 <tr class="even">
-<td align="left">Sacramento</td>
-<td align="right">394</td>
-</tr>
-<tr class="odd">
 <td align="left">San Diego</td>
-<td align="right">361</td>
-</tr>
-<tr class="even">
-<td align="left">Santa Clara</td>
-<td align="right">289</td>
+<td align="right">265</td>
 </tr>
 <tr class="odd">
-<td align="left">Riverside</td>
-<td align="right">205</td>
+<td align="left">Orange</td>
+<td align="right">185</td>
+</tr>
+<tr class="even">
+<td align="left">Fresno</td>
+<td align="right">159</td>
+</tr>
+<tr class="odd">
+<td align="left">San Bernardino</td>
+<td align="right">156</td>
 </tr>
 </tbody>
 </table>
@@ -481,15 +467,15 @@ head(covid)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Imperial</td>
-<td align="right">0.0619044</td>
+<td align="right">0.0622134</td>
 </tr>
 <tr class="even">
 <td align="left">Kings</td>
-<td align="right">0.0460246</td>
+<td align="right">0.0464038</td>
 </tr>
 <tr class="odd">
 <td align="left">Kern</td>
-<td align="right">0.0339513</td>
+<td align="right">0.0341423</td>
 </tr>
 <tr class="even">
 <td align="left">Tulare</td>
@@ -512,32 +498,32 @@ head(covid)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Kings</td>
-<td align="right">0.0007912</td>
+<td align="right">0.0002615</td>
 </tr>
 <tr class="even">
-<td align="left">Madera</td>
-<td align="right">0.0004513</td>
+<td align="left">San Benito</td>
+<td align="right">0.0002388</td>
 </tr>
 <tr class="odd">
-<td align="left">Calaveras</td>
-<td align="right">0.0002614</td>
+<td align="left">Monterey</td>
+<td align="right">0.0002027</td>
 </tr>
 <tr class="even">
-<td align="left">Sacramento</td>
-<td align="right">0.0002539</td>
+<td align="left">Lake</td>
+<td align="right">0.0001708</td>
 </tr>
 <tr class="odd">
-<td align="left">Sutter</td>
-<td align="right">0.0002269</td>
+<td align="left">Fresno</td>
+<td align="right">0.0001591</td>
 </tr>
 </tbody>
 </table>
 <div id="results-of-california" class="section level3">
 <h3>Results of California</h3>
 <ol style="list-style-type: decimal">
-<li><p>the total number of cases: 7.57125^{5}</p></li>
-<li><p>the total number of new cases: 4108</p></li>
-<li><p>the total number of the total number of safe counties : 17</p></li>
+<li><p>the total number of cases: 7.63389^{5}</p></li>
+<li><p>the total number of new cases: 2808</p></li>
+<li><p>the total number of the total number of safe counties : 21</p></li>
 </ol>
 <p># Question 2 <img src="lab2_files/figure-html/unnamed-chunk-9-1.png" width="75%" style="display: block; margin: auto;" /></p>
 <p><img src="lab2_files/figure-html/unnamed-chunk-11-1.png" width="75%" style="display: block; margin: auto;" /></p>
