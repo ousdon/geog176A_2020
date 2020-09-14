@@ -148,7 +148,7 @@ Floods = raster("/Users/xingxin/Github/geog176a-summer-2020-lab1/hand-raster.tif
 
 Flood_offset = Floods
 
-Flood_offset[Flood_offset > 10.02] = NA
+Flood_offset[Flood_offset > 10.25] = NA
 
 ```
 
@@ -166,9 +166,7 @@ plot(railways$geometry, add=TRUE, col= "green", cex=1, pch=16)
 ```{r message = FALSE, warning = FALSE}
 cols = ifelse(!is.na(raster::extract(Flood_offset, buildings_poly)), "red", "black")
 
-stage = 10.02
-
-plot(hillshade, axes = FALSE, box = FALSE, col = gray.colors(256, alpha = 0.5), legend = FALSE, main = paste(sum(cols =="red"), "impacted building",stage, "foot stage"), cex = 0.5)
+plot(hillshade, axes = FALSE, box = FALSE, col = gray.colors(256, alpha = 0.5), legend = FALSE, main = paste(sum(cols =="red"), "impacted building", "10.02 foot stage"), cex = 0.5)
 
 plot(Flood_offset, add = TRUE, col = rev(blues9))
 
